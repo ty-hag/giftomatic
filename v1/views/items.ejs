@@ -1,0 +1,21 @@
+<% include ./partials/header.ejs %>
+
+<h1>Wishlist</h1>
+
+<% wishlistItems %>
+
+<div id="wishlist">
+    <% wishlistItems.forEach(function(item){ %>
+        <a class="item-link" href="/items/<%= item._id %>">
+            <div class="wishlist-item">
+                <div class="wishlist-title">
+                    <%= item.name %>
+                </div>
+                <span><%= item.price %></span>
+                <span class="purchaseStatus <%= item.purchaseStatus %>"><%= item.purchaseStatus %></span>
+            </div>
+        </a>
+    <% }); %>
+</div>
+
+<% include ./partials/footer.ejs %>

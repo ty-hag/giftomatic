@@ -1,0 +1,11 @@
+<% include ./partials/header %>
+
+<h1>Add an item</h1>
+<form action="/items" method="POST">
+    <input type='text' class='input-new' name="wishlistItem[name]" placeholder="Name of item, description..."></input>
+    <input type='text' class='input-new' name="wishlistItem[price]" placeholder="Price"></input>
+    <textarea class='input-new' name="wishlistItem[notes]" placeholder="notes"></textarea>
+    <button class="input-new button">Add it!</button>
+</form>
+
+<%include ./partials/footer %>

@@ -1,0 +1,54 @@
+body {
+    font-family: Arial;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+.input-new {
+    display: block;
+    margin: 5px;
+}  
+
+.button {
+    background-color: #007bd1;
+    color: white;
+    border: none;
+    padding: 3px;
+    border-radius: 3px;
+}
+
+.wishlist-item {
+    margin: 10px;
+    padding: 10px;
+    background-color: #dbf0ff;
+    border-radius: 3px;
+}
+
+.wishlist-item:hover {
+    background-color: #cde4f4;
+}
+
+.wishlist-title {
+    font-size: 1.2em;
+}
+
+.purchaseStatus {
+    border-radius: 3px;
+    padding: 2px;
+    color: white;
+}
+
+.open {
+    background-color: #70d10f;
+}
+
+.claimed {
+    background-color: #d1ad0f;
+}
+
+.purchased {
+    background-color: #d10f0f;
+}
