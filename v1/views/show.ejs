@@ -1,21 +1,24 @@
 <% include ./partials/header %>
 
-    <div class='show-item-title'><%= item.name %></div>
-    <div class='show-item-price'><%= item.price %></div>
-    <div class='show-item-purchaseStatus'><%= item.purchaseStatus %></div>
-    <div class='show-item-notes'><%= item.notes %></div>
+    <div class='show-item title'>Item: <%= item.name %></div>
+    <div class='show-item price'><%= item.price %></div>
+    <div class='show-item purchaseStatus'>Status: <%= item.purchaseStatus %></div>
+    <div class='show-item purchaseLink'><a href='<%= item.link %>'>Available here</a></div>
+    <div class='show-item notes'>Notes: <%= item.notes %></div>
     <form action='/items/<%= item._id %>?_method=DELETE' method="POST">
-        <button class='show-item-delete'>Delete item</button>
+        <button class='btn btn-delete'>Delete item</button>
     </form>
     
     <h3>Comments</h3>
-    <% if (item.comments.length === 0){ %>
-    No comments
+    <% if(item.comments.length === 0){ %>
+    <div>No comments entered</div>
     <% }else{ %>
     <% item.comments.forEach(function(comment){ %>
-    <div class='show-item-comment'><%= comment %></div>
+    <div class='show-item-comment'><%= comment.text %></div>
     <% }); %>
     <% } %>
-    <button>Add comment</button>
+    <div>
+        <a class='btn' href='/items/<%= item._id %>/comments/new'>Add Comment</a>
+    </div>
 
 <% include ./partials/footer %>

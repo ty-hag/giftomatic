@@ -7,7 +7,7 @@ var data = [
         purchaseStatus: "open",
         link: "https://www.amazon.com/Apple-iPad-12-9-Inch-Display-Space/dp/B0155OCLWK",
         price: "$540.00",
-        notes: "I don't mind the refurbished version.\nAny color other than pink gold is fine."
+        notes: "Refurbished version is good."
     },
     {
         name: "Klay Thompson 'The Town' Jersey",

@@ -19,6 +19,8 @@ app.get('/', function(req, res){
     res.render("landing");
 });
 
+// --------------- ITEM ROUTES ---------------
+
 // ITEM - INDEX
 app.get('/items', function(req, res){
     WishlistItem.find({}, function(err, allWishlistItems){
@@ -55,11 +57,13 @@ app.get('/items/:id', function(req, res){
         if(err){
             console.log(err);
         } else {
-            //res.render('/item/' + req.params.id, {item:foundItem});
+            console.log(foundItem);
             res.render('show', {item:foundItem});
         }
     });
 });
+
+// ITEM - UPDATE
 
 // ITEM - DELETE
 app.delete('/items/:id', function(req, res){
@@ -72,9 +76,39 @@ app.delete('/items/:id', function(req, res){
     });
 });
 
+// --------------- COMMENT ROUTES ---------------
+
 // COMMENT - NEW
-app.get('/items/:id/comments/newComment', function(req, res){
-    res.render('newComment');
+app.get('/items/:id/comments/new', function(req, res){
+    WishlistItem.findById(req.params.id, function(err, foundItem){
+        if(err){
+            console.log(err);
+            res.redirect('/items');
+        } else {
+            res.render('newComment', {item: foundItem});
+        }
+    });
+});
+
+// COMMENT - CREATE
+app.post('/items/:id/comments', function(req, res){
+    Comment.create(req.body.comment, function(err, newComment){
+        if(err){
+            console.log(err);
+        } else {
+            console.log(newComment);
+            WishlistItem.findById(req.params.id, function(err, itemToUpdate){
+                if(err){
+                    console.log(err);
+                }else{
+                    itemToUpdate.comments.push(newComment);
+                    itemToUpdate.save();
+                    console.log(itemToUpdate);
+                    res.redirect(`/items/${req.params.id}`);
+                }
+            });
+        }
+    });
 });
 
 app.listen(process.env.PORT, process.env.IP, function(){

@@ -1,0 +1,9 @@
+<% include ./partials/header %>
+
+<form action='/items/<%= item._id %>/comments' method='POST'>
+    Comment:
+    <textarea name='comment[text]' placeholder='Write comment here...'></textarea>
+    <button>Submit</button>
+</form>
+
+<% include ./partials/footer %>

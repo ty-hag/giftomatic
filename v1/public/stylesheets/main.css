@@ -1,3 +1,5 @@
+/* --------------  GENERAL ----------------*/
+
 body {
     font-family: Arial;
 }
@@ -7,18 +9,19 @@ a {
     text-decoration: none;
 }
 
-.input-new {
-    display: block;
-    margin: 5px;
-}  
-
-.button {
+.btn {
     background-color: #007bd1;
     color: white;
     border: none;
     padding: 3px;
     border-radius: 3px;
 }
+
+.btn-delete {
+    background-color: #b74b40;
+}
+
+/* --------------  WISHLIST LIST PAGE  ----------------*/
 
 .wishlist-item {
     margin: 10px;
@@ -52,3 +55,11 @@ a {
 .purchased {
     background-color: #d10f0f;
 }
+
+/* --------------  WISHLIST NEW PAGE  ----------------*/
+.input-new {
+    display: block;
+    margin: 5px;
+}
+
+/* --------------  ITEM PAGE  ----------------*/
