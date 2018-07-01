@@ -2,23 +2,28 @@
 
     <div class='show-item title'>Item: <%= item.name %></div>
     <div class='show-item price'><%= item.price %></div>
-    <div class='show-item purchaseStatus'>Status: <%= item.purchaseStatus %></div>
+    <div>
+        <span class='show-item purchaseStatus <%= item.purchaseStatus %>'><%= item.purchaseStatus %></span>
+    </div>
     <div class='show-item purchaseLink'><a href='<%= item.link %>'>Available here</a></div>
     <div class='show-item notes'>Notes: <%= item.notes %></div>
     <form action='/items/<%= item._id %>?_method=DELETE' method="POST">
         <button class='btn btn-delete'>Delete item</button>
     </form>
     
-    <h3>Comments</h3>
-    <% if(item.comments.length === 0){ %>
-    <div>No comments entered</div>
-    <% }else{ %>
-    <% item.comments.forEach(function(comment){ %>
-    <div class='show-item-comment'><%= comment.text %></div>
-    <% }); %>
-    <% } %>
-    <div>
-        <a class='btn' href='/items/<%= item._id %>/comments/new'>Add Comment</a>
+    <div id='comments-section'>
+        <h3>Comments</h3>
+        <div id='comment-list'>
+            <% item.comments.forEach(function(comment){ %>
+                <div class='show-item-comment'><%= comment.text %></div>
+            <% }); %>
+        </div>
+        <div>
+            <form id='add-comment-form' action='/items/<%= item._id %>/comments' method="POST">
+                <textarea name='comment[text]'></textarea>
+                <button id='add-comment-btn' class='btn'>Add Comment</button>
+            </form>
+        </div>
     </div>
 
 <% include ./partials/footer %>

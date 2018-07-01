@@ -52,12 +52,10 @@ app.get('/items/new', function(req, res){
 
 // ITEM - SHOW
 app.get('/items/:id', function(req, res){
-    console.log("item show route hit");
     WishlistItem.findById(req.params.id).populate("comments").exec(function(err, foundItem){
         if(err){
             console.log(err);
         } else {
-            console.log(foundItem);
             res.render('show', {item:foundItem});
         }
     });
@@ -92,11 +90,13 @@ app.get('/items/:id/comments/new', function(req, res){
 
 // COMMENT - CREATE
 app.post('/items/:id/comments', function(req, res){
+    console.log("req.body:", req.body);
+    
     Comment.create(req.body.comment, function(err, newComment){
         if(err){
             console.log(err);
         } else {
-            console.log(newComment);
+            console.log("newComment:", newComment);
             WishlistItem.findById(req.params.id, function(err, itemToUpdate){
                 if(err){
                     console.log(err);
@@ -104,7 +104,7 @@ app.post('/items/:id/comments', function(req, res){
                     itemToUpdate.comments.push(newComment);
                     itemToUpdate.save();
                     console.log(itemToUpdate);
-                    res.redirect(`/items/${req.params.id}`);
+                    res.json(newComment);
                 }
             });
         }
