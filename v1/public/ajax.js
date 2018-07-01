@@ -19,6 +19,7 @@ $('#add-comment-form').submit(function(e){
                 `
                 <div>${data.text}<div>
                 `)
+            $('#add-comment-form textarea').val('');
         }    
     });
 });

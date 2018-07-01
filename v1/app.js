@@ -65,14 +65,40 @@ app.get('/items/:id', function(req, res){
 
 // ITEM - DELETE
 app.delete('/items/:id', function(req, res){
-    WishlistItem.findByIdAndRemove(req.params.id, function(err){
+    // First find the item you want to delete
+    WishlistItem.findById(req.params.id, function(err, foundItem){
         if(err){
-            res.redirect('/items'); //!@! This needs an error message or something
+            console.log(err);
+        } else if (foundItem.comments){
+            foundItem.comments.forEach(function(comment){
+                Comment.findByIdAndRemove(comment._id, function(err){
+                    if(err){
+                        console.log(err);
+                    } 
+                });
+            });
+        }
+    });
+        
+    WishlistItem.findByIdAndRemove(req.params.id, function(err, item){
+        if(err){
+            console.log(err);
         } else {
+            console.log(`'${item.name}' deleted.`);
             res.redirect('/items');
         }
     });
 });
+    
+
+    
+    // WishlistItem.findByIdAndRemove(req.params.id, function(err){
+    //     if(err){
+    //         res.redirect('/items'); //!@! This needs an error message or something
+    //     } else {
+    //         res.redirect('/items');
+    //     }
+    // });
 
 // --------------- COMMENT ROUTES ---------------
 
@@ -90,21 +116,19 @@ app.get('/items/:id/comments/new', function(req, res){
 
 // COMMENT - CREATE
 app.post('/items/:id/comments', function(req, res){
-    console.log("req.body:", req.body);
     
     Comment.create(req.body.comment, function(err, newComment){
         if(err){
             console.log(err);
         } else {
-            console.log("newComment:", newComment);
             WishlistItem.findById(req.params.id, function(err, itemToUpdate){
                 if(err){
                     console.log(err);
                 }else{
                     itemToUpdate.comments.push(newComment);
                     itemToUpdate.save();
-                    console.log(itemToUpdate);
                     res.json(newComment);
+                    console.log(`Comment added to '${itemToUpdate.name}'.`);
                 }
             });
         }

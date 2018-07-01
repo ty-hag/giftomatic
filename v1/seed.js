@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
 var WishlistItem = require("./models/wishlistItem");
+var Comment = require("./models/comment");
 
 var data = [
     {
@@ -40,9 +41,17 @@ function seedDB(){
                 } else {
                     console.log(`Wishlist item added - ${seed.name}`);
                 }
-            })
-        })
-    })
+            });
+        });
+    });
+    
+    Comment.remove({}, function(err){
+        if(err){
+            console.log(err);
+        } else {
+            console.log("Cleared comments.");
+        }
+    });
 }
 
 module.exports = seedDB;
