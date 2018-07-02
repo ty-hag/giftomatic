@@ -2,8 +2,6 @@
 
 <h1>Wishlist</h1>
 
-<% wishlistItems %>
-
 <div id="wishlist">
     <% wishlistItems.forEach(function(item){ %>
         <a class="item-link" href="/items/<%= item._id %>">
@@ -17,5 +15,15 @@
         </a>
     <% }); %>
 </div>
+
+<span class='btn' id='show-item-form'>Add new item</span>
+
+<form id='new-item-form' action="/items" method="POST">
+    <input type='text' class='input-new' name="wishlistItem[name]" placeholder="Name of item, description..."></input>
+    <input type='text' class='input-new' name="wishlistItem[price]" placeholder="Price"></input>
+    <input type='text' class='input-new' name="wishlistItem[link]" placeholder="Link"></input>
+    <textarea class='input-new' name="wishlistItem[notes]" placeholder="notes"></textarea>
+    <button class="input-new btn">Add it!</button>  <span  class='btn' id='cancel-add-item'>Cancel</span>
+</form>
 
 <% include ./partials/footer.ejs %>

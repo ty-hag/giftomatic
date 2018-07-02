@@ -15,13 +15,23 @@ a {
     border: none;
     padding: 3px;
     border-radius: 3px;
+    display: inline;
+}
+
+.btn:hover{
+    background-color: #0096ff;
 }
 
 .btn-delete {
     background-color: #b74b40;
 }
 
-/* --------------  WISHLIST LIST PAGE  ----------------*/
+/* --------------  WISHLIST ITEM LIST PAGE  ----------------*/
+
+#new-item-form {
+    display:none;
+    background-color: gray;
+}
 
 .wishlist-item {
     margin: 10px;

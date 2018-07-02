@@ -40,7 +40,7 @@ app.post('/items', function(req, res){
         if(err){
             console.log(err);
         } else {
-            res.redirect("/items");
+            res.json(newlyCreatedItem);
         }
     });
 });
