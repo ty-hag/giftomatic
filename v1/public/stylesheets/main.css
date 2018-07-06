@@ -26,6 +26,33 @@ a {
     background-color: #b74b40;
 }
 
+/* --------------  LANDING PAGE  ----------------*/
+
+#landing-title{
+    font-size: 50pt;
+    text-align: center;
+}
+
+#skull-landing{
+    margin: 0 auto;
+    animation-name: skullSpin;
+    animation-duration: 3s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes skullSpin{
+    0%{
+        transform: rotate(0deg) scale(1);
+    }
+    50%{
+        transform: rotate(180deg) scale(1.3);
+    }
+    100%{
+        transform: rotate(360deg) scale(1);
+    }
+}
+
 /* --------------  WISHLIST ITEM LIST PAGE  ----------------*/
 
 #new-item-form {

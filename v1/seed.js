@@ -1,8 +1,9 @@
 var mongoose = require("mongoose");
+var Wishlist = require("./models/wishlist");
 var WishlistItem = require("./models/wishlistItem");
 var Comment = require("./models/comment");
 
-var data = [
+var itemData = [
     {
         name: "iPad pro",
         purchaseStatus: "open",
@@ -23,6 +24,24 @@ var data = [
         link: "https://www.amazon.com/Mario-Tennis-Aces-Nintendo-Switch/dp/B078XYF9SV?th=1",
         price: "$65.00",
         notes: "Please check to make sure it's the download version."
+    },
+    {
+        name: "Surfboard",
+        purchaseStatus: "open",
+        link: "https://www.evo.com/longboards/catch-surf-log-60-longboard#image=139094/581336/catch-surf-log-6-0-longboard-blue.jpg",
+        price: "$345.00",
+        notes: "Orange color please."
+    }
+];
+
+var listData =[
+    {
+        name: "Christmas List",
+        description: "This is what I want for CHRISTMAS y'all!",
+    },
+    {
+        name: "Birthday List",
+        description: "I need the sweet birthday material expression of love"
     }
 ];
 
@@ -33,8 +52,8 @@ function seedDB(){
             console.log(err);
         }
         console.log("seedDB func has removed wishlist items.");
-        // add seed data
-        data.forEach(function(seed){
+        // add item seed data
+        itemData.forEach(function(seed){
             WishlistItem.create(seed, function(err, wishlistItem){
                 if(err){
                     console.log(err);
@@ -45,6 +64,8 @@ function seedDB(){
         });
     });
     
+    
+    //remove comments
     Comment.remove({}, function(err){
         if(err){
             console.log(err);
@@ -52,6 +73,8 @@ function seedDB(){
             console.log("Cleared comments.");
         }
     });
+    
+    
 }
 
 module.exports = seedDB;

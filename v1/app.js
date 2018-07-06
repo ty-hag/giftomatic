@@ -5,7 +5,7 @@ var express = require('express'),
     Comment = require('./models/comment'),
     bodyParser = require("body-parser"),
     methodOverride = require("method-override"),
-    seedDB = require('./seed');
+    seedDB = require('./seed_plusList');
 
 mongoose.connect("mongodb://localhost/giftOMatic");
 seedDB();
@@ -14,10 +14,17 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
+app.use(express.static("public"));
 
 app.get('/', function(req, res){
     res.render("landing");
 });
+
+// --------------- LANDING PAGE ---------------
+
+app.get('/', function(req, res){
+    res.render('landing');
+})
 
 // --------------- ITEM ROUTES ---------------
 
