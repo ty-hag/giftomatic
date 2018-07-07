@@ -2,10 +2,11 @@ var express = require('express'),
     app = express(),
     mongoose = require('mongoose'),
     WishlistItem = require('./models/wishlistItem'),
+    Wishlist = require('./models/wishlist'),
     Comment = require('./models/comment'),
     bodyParser = require("body-parser"),
     methodOverride = require("method-override"),
-    seedDB = require('./seed_plusList');
+    seedDB = require('./seed_callbacks');
 
 mongoose.connect("mongodb://localhost/giftOMatic");
 seedDB();
@@ -24,6 +25,19 @@ app.get('/', function(req, res){
 
 app.get('/', function(req, res){
     res.render('landing');
+})
+
+// -------------LIST ROUTES---------------------
+
+app.get('/lists', function(req, res){
+    Wishlist.find({}, function(err, allWishlists){
+        if(err){
+            console.log(err)
+            res.redirect('/');
+        } else {
+            res.render('lists', {wishlists: allWishlists});
+        }
+    })
 })
 
 // --------------- ITEM ROUTES ---------------
