@@ -53,6 +53,17 @@ a {
     }
 }
 
+/* --------------  WISHLIST LIST PAGE  ----------------*/
+
+.wishlist {
+    background-color: #eaeaea;
+    border-radius: 3px;
+    margin: 3px;
+}
+.wishlist:hover {
+    background-color: #e5e5e5;
+}
+
 /* --------------  WISHLIST ITEM LIST PAGE  ----------------*/
 
 #new-item-form {

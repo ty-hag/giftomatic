@@ -25,20 +25,33 @@ app.get('/', function(req, res){
 
 app.get('/', function(req, res){
     res.render('landing');
-})
+});
 
 // -------------LIST ROUTES---------------------
 
+// LIST - INDEX
 app.get('/lists', function(req, res){
     Wishlist.find({}, function(err, allWishlists){
         if(err){
-            console.log(err)
+            console.log(err);
             res.redirect('/');
         } else {
             res.render('lists', {wishlists: allWishlists});
         }
-    })
-})
+    });
+});
+
+// LIST - SHOW
+app.get('/lists/:id', function(req, res){
+    Wishlist.findById(req.params.id).populate('items').exec(function(err, foundList){
+        if(err){
+            console.log(err);
+            res.redirect("/lists");
+        } else {
+            res.render('wishlist_items', {list: foundList});
+        }
+    });
+});
 
 // --------------- ITEM ROUTES ---------------
 
@@ -66,7 +79,7 @@ app.post('/items', function(req, res){
     });
 });
 
-// ITEM - NEW
+// ITEM - NEW -- No longer needed
 app.get('/items/new', function(req, res){
     res.render("new");
 });

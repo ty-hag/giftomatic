@@ -37,11 +37,11 @@ var itemData = [
 var listData =[
     {
         name: "Christmas List",
-        description: "This is what I want for CHRISTMAS y'all!",
+        summary: "This is what I want for CHRISTMAS y'all!",
     },
     {
         name: "Birthday List",
-        description: "I need the sweet birthday material expression of love"
+        summary: "I need the sweet birthday material expression of love"
     }
 ];
 
@@ -69,16 +69,14 @@ function seedDB(){
                                 if(err){
                                     console.log(err);
                                 } else {
-                                    console.log(`Wishlist items added - \n${items}`);
                                     Wishlist.create(listData, function(err, lists){
                                         if(err){
                                             console.log(err);
                                         } else {
-                                            console.log(`Wishlists added - \n${lists}`);
                                             items.forEach(function(item){
                                                 lists[0].items.push(item);
                                             });
-                                            console.log(`list 0: ${lists[0]}`);
+                                            lists[0].save();
                                         }
                                     })
                                 }

@@ -1,5 +1,14 @@
 <% include ./partials/header %>
 
-<%= wishlists %>
+<div id="wishlists">
+    <% wishlists.forEach(function(list){ %>
+        <a href="/lists/<%= list._id %>">
+            <div class="wishlist">
+                <div><%= list.name %></div>
+                <div><%= list.summary %></div>
+            </div>
+        </a>
+    <% }); %>
+</div>
 
 <% include ./partials/footer %>
