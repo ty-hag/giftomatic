@@ -26,6 +26,18 @@ a {
     background-color: #b74b40;
 }
 
+/* ----------- HEADER ------------------- */
+
+header {
+    background-color: black;
+    color: white;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
 /* --------------  LANDING PAGE  ----------------*/
 
 #landing-title{

@@ -16,11 +16,11 @@
     <% }); %>
 </div>
 
-<!--
+
 
 <span class='btn' id='show-item-form'>Add new item</span>
 
-<form id='new-item-form' action="/items" method="POST">
+<form id='new-item-form' action="/items/<%= list._id %>" method="POST">
     <input type='text' class='input-new' name="wishlistItem[name]" placeholder="Name of item, description..."></input>
     <input type='text' class='input-new' name="wishlistItem[price]" placeholder="Price"></input>
     <input type='text' class='input-new' name="wishlistItem[link]" placeholder="Link"></input>
@@ -28,5 +28,4 @@
     <button class="input-new btn">Add it!</button>  <span  class='btn' id='cancel-add-item'>Cancel</span>
 </form>
 
--->
 <% include ./partials/footer.ejs %>

@@ -1,8 +1,12 @@
 var express = require('express'),
     app = express(),
     mongoose = require('mongoose'),
+    passport = require('passport'),
+    LocalStrategy = require('passport-local'),
+    passportLocalMongoose = require('passport-local-mongoose'),
     WishlistItem = require('./models/wishlistItem'),
     Wishlist = require('./models/wishlist'),
+    User = require('./models/user'),
     Comment = require('./models/comment'),
     bodyParser = require("body-parser"),
     methodOverride = require("method-override"),
@@ -17,6 +21,25 @@ app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 app.use(express.static("public"));
 
+// PASSPORT CONFIG
+app.use(require('express-session')({
+    secret: "O-Meippe-ppe no beroberooon!",
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+// User thingy?
+app.use(function(req, res, next){
+    res.locals.currentUser = req.user;
+    next();
+});
+
+///ROUTES
 app.get('/', function(req, res){
     res.render("landing");
 });
@@ -27,10 +50,70 @@ app.get('/', function(req, res){
     res.render('landing');
 });
 
+// --------------- REGISTER and LOGIN ROUTES ---------------
+app.get('/register', function(req, res){
+    res.render('register');
+})
+
+app.post('/register', function(req, res){
+    var newUser = new User(
+        {
+            username: req.body.username,
+            name: req.body.name
+        }
+    );
+    
+    User.register(newUser, req.body.password, function(err, user){
+        if(err){
+            console.log(err);
+            res.render('register');
+        } else {
+            passport.authenticate("local")(req, res, function(){
+                console.log(`${user.username} has registered.`);
+                res.redirect("/lists");
+            });
+        }
+    });
+});
+
+app.get('/login', function(req, res){
+    res.render('login');
+})
+
+app.post('/login',
+    passport.authenticate('local',
+    {failureRedirect: '/login'}
+    ), function(req, res){
+        //console.log('\n\n ITS THE REQ OBJ \n\n', req);
+        User.findById(req.user._id, function(err, foundUser){ //!@! Does req.user.id work here?
+            if(err){
+                console.log(err);
+                res.redirect('/login');
+            } else {
+                res.redirect(`/user/${foundUser._id}`) //!@!
+            }
+        })
+    }
+);
+
+//--------------USER ROUTES---------------------
+app.get('/user/:id', function(req, res){
+    User.findById(req.params.id, function(err, foundUser){
+        if(err){
+            console.log('\n\n YOYOYOYOYOYO \n\n');
+            console.log(err);
+            res.redirect(`/user/${req.user._id}`, {user: req.user._id}); //!@! not sure if this works
+        } else {
+            res.render(`user`, {user: foundUser});
+        }
+    })
+})
+
 // -------------LIST ROUTES---------------------
 
 // LIST - INDEX
 app.get('/lists', function(req, res){
+    console.log(req.user);
     Wishlist.find({}, function(err, allWishlists){
         if(err){
             console.log(err);

@@ -3,4 +3,12 @@
     <link rel="stylesheet" href="/stylesheets/main.css">
 </head>  
 <body>
-<div>This is the header.</div>
+<header>
+    <% if(!currentUser){ %>
+        <a href='/register'>Register</a>
+        <a href='/login'>Login</a>
+    <% } else { %>
+        Hello, <%= currentUser.name %>
+        <a href='/logout'>Logout</a>
+    <% } %>
+</header>
