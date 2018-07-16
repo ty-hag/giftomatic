@@ -50,7 +50,7 @@ app.get('/', function(req, res){
     res.render('landing');
 });
 
-// --------------- REGISTER and LOGIN ROUTES ---------------
+// --------------- REGISTER, LOGIN, LOGOUT ROUTES ---------------
 app.get('/register', function(req, res){
     res.render('register');
 })
@@ -59,7 +59,8 @@ app.post('/register', function(req, res){
     var newUser = new User(
         {
             username: req.body.username,
-            name: req.body.name
+            firstName: req.body.firstName,
+            lastName: req.body.lastName
         }
     );
     
@@ -70,7 +71,7 @@ app.post('/register', function(req, res){
         } else {
             passport.authenticate("local")(req, res, function(){
                 console.log(`${user.username} has registered.`);
-                res.redirect("/lists");
+                res.redirect(`/user/${user._id}`);
             });
         }
     });
@@ -84,25 +85,28 @@ app.post('/login',
     passport.authenticate('local',
     {failureRedirect: '/login'}
     ), function(req, res){
-        //console.log('\n\n ITS THE REQ OBJ \n\n', req);
-        User.findById(req.user._id, function(err, foundUser){ //!@! Does req.user.id work here?
+        User.findById(req.user._id, function(err, foundUser){
             if(err){
                 console.log(err);
                 res.redirect('/login');
             } else {
-                res.redirect(`/user/${foundUser._id}`) //!@!
+                res.redirect(`/user/${foundUser._id}`)
             }
         })
     }
 );
 
+app.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/');
+})
+
 //--------------USER ROUTES---------------------
 app.get('/user/:id', function(req, res){
     User.findById(req.params.id, function(err, foundUser){
         if(err){
-            console.log('\n\n YOYOYOYOYOYO \n\n');
             console.log(err);
-            res.redirect(`/user/${req.user._id}`, {user: req.user._id}); //!@! not sure if this works
+            res.redirect(`/user/${req.user._id}`, {user: req.user._id});
         } else {
             res.render(`user`, {user: foundUser});
         }
@@ -112,7 +116,7 @@ app.get('/user/:id', function(req, res){
 // -------------LIST ROUTES---------------------
 
 // LIST - INDEX
-app.get('/lists', function(req, res){
+app.get('/lists', isLoggedIn, function(req, res){
     console.log(req.user);
     Wishlist.find({}, function(err, allWishlists){
         if(err){
@@ -139,7 +143,7 @@ app.get('/lists/:id', function(req, res){
 // --------------- ITEM ROUTES ---------------
 
 // ITEM - INDEX
-app.get('/items', function(req, res){
+app.get('/items', isLoggedIn, function(req, res){
     WishlistItem.find({}, function(err, allWishlistItems){
         if(err){
             res.send("error");
@@ -251,6 +255,14 @@ app.post('/items/:id/comments', function(req, res){
         }
     });
 });
+
+//------------ LOGIN MIDDLEWARE ---------------------
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect('/login');
+}
 
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log("Gift-o-matic online!");

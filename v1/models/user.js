@@ -3,9 +3,16 @@ var passportLocalMongoose = require("passport-local-mongoose");
 
 var UserSchema = new mongoose.Schema(
     {
-        name: String,
+        firstName: String,
+        lastName: String,
         password: String,
-        username: String
+        username: String,
+        myLists: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Wishlist"
+            }
+        ]
     }
 )
 

@@ -2,6 +2,7 @@ var mongoose = require("mongoose");
 var Wishlist = require("./models/wishlist");
 var WishlistItem = require("./models/wishlistItem");
 var Comment = require("./models/comment");
+var User = require("./models/user");
 
 var itemData = [
     {
@@ -45,7 +46,36 @@ var listData =[
     }
 ];
 
+var userData = [
+    {
+        firstName: `Baddo`,
+        lastName: `Bontsweep`,
+        username: `bb`,
+        password: `password`
+    },
+    {
+        firstName: `Lengor`,
+        lastName: `Amalaama`,
+        username: `ama`,
+        password: `password`
+    },
+];
+
 function seedDB(){
+    User.remove({},function(err){
+        if(err){
+            console.log(err);
+        } else {
+            console.log("Removed users.")
+            User.create(userData, function(err){
+                if(err){
+                    console.log(err);
+                } else {
+                    console.log("Added user seed data.");
+                }
+            })
+        }
+    })
     //remove all wishlist items
     WishlistItem.remove({}, function(err){
         if(err){
