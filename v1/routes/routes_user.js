@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router({mergeParams: true});
+var User = require('../models/user');
 
-router.get('/user/:id', function(req, res){
+router.get('/:id', function(req, res){
     User.findById(req.params.id, function(err, foundUser){
         if(err){
             console.log(err);
@@ -11,3 +12,5 @@ router.get('/user/:id', function(req, res){
         }
     })
 });
+
+module.exports = router;

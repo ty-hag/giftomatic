@@ -10,6 +10,7 @@ var express = require('express'),
     Comment = require('./models/comment'),
     bodyParser = require("body-parser"),
     methodOverride = require("method-override"),
+    userRoutes = require('./routes/routes_user'),
     seedDB = require('./seed_callbacks');
 
 mongoose.connect("mongodb://localhost/giftOMatic");
@@ -33,13 +34,16 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// User thingy?
+// Make logged-in user data available in every response (for ejs templates)
 app.use(function(req, res, next){
     res.locals.currentUser = req.user;
     next();
 });
 
-///ROUTES
+// Router
+app.use('/user', userRoutes);
+
+///============== ROUTES ========================
 app.get('/', function(req, res){
     res.render("landing");
 });
@@ -102,39 +106,87 @@ app.get('/logout', function(req, res){
 })
 
 //--------------USER ROUTES---------------------
-app.get('/user/:id', function(req, res){
-    User.findById(req.params.id, function(err, foundUser){
-        if(err){
-            console.log(err);
-            res.redirect(`/user/${req.user._id}`, {user: req.user._id});
-        } else {
-            res.render(`user`, {user: foundUser});
-        }
-    })
-})
+// app.get('/user/:id', function(req, res){
+//     User.findById(req.params.id, function(err, foundUser){
+//         if(err){
+//             console.log(err);
+//             res.redirect(`/user/${req.user._id}`, {user: req.user._id});
+//         } else {
+//             res.render(`user`, {user: foundUser});
+//         }
+//     })
+// })
 
 // -------------LIST ROUTES---------------------
 
 // LIST - INDEX
-app.get('/lists', isLoggedIn, function(req, res){
-    console.log(req.user);
-    Wishlist.find({}, function(err, allWishlists){
+// app.get('/lists', isLoggedIn, function(req, res){
+//     console.log(req.user);
+//     Wishlist.find({}, function(err, allWishlists){
+//         if(err){
+//             console.log(err);
+//             res.redirect('/');
+//         } else {
+//             res.render('lists', {wishlists: allWishlists});
+//         }
+//     });
+// });
+
+// USER THEN LIST // !@! don't know if this works, need to add ability for users to add lists
+app.get('/user/:id/lists', isLoggedIn, function(req, res){
+    User.findById(req.params.id).populate('myLists').exec(function(err, foundUser){
+        if(err){
+            console.log(err)
+            res.redirect(`/`) //!@! change this later
+        } else {
+            res.render('lists', {user: foundUser}); //!@! list page shows no lists
+        }
+    })
+})
+
+// LIST - NEW
+app.get('/user/:id/lists/new', isLoggedIn, function(req, res){
+    User.findById(req.params.id, function(err, foundUser){
         if(err){
             console.log(err);
-            res.redirect('/');
+            res.redirect('/') //!@! change this later
         } else {
-            res.render('lists', {wishlists: allWishlists});
+            // passing user despite the fact that it should always be currentUser, never any other user
+            // UNLESS we allow users to create lists for others (ie parent for child)
+            res.render('newList', {user: foundUser});
         }
-    });
+    })
 });
 
+// LIST - CREATE
+app.post('/user/:id/lists', isLoggedIn, function(req, res){
+    console.log(`req.body.newList = ${req.body.newList}`);
+    Wishlist.create(req.body.newList, function(err, newList){
+        if(err){
+            console.log(err);
+            res.redirect(`/user/${req.params.id}/lists/new`);
+        } else {
+            User.findById(req.params.id, function(err, foundUser){
+                if(err){
+                    console.log(err);
+                } else {
+                    foundUser.myLists.push(newList);
+                    res.redirect(`/user/${req.params.id}/lists/${newList._id}`);
+                }
+            })
+        }
+    })
+})
+
 // LIST - SHOW
-app.get('/lists/:id', function(req, res){
-    Wishlist.findById(req.params.id).populate('items').exec(function(err, foundList){
+app.get('/user/:user_id/lists/:list_id', function(req, res){
+    Wishlist.findById(req.params.list_id).populate('items').exec(function(err, foundList){
         if(err){
             console.log(err);
             res.redirect("/lists");
         } else {
+            //route works but list is not populating!
+            console.log('foundlist: ', foundList);
             res.render('wishlist_items', {list: foundList});
         }
     });
@@ -262,6 +314,13 @@ function isLoggedIn(req, res, next){
         return next();
     }
     res.redirect('/login');
+}
+
+function isCurrentUser(req, res, next){
+    if(req.user === req.params.id){
+        return next();
+    }
+    res.send("You do not have permission to access that thing!");
 }
 
 app.listen(process.env.PORT, process.env.IP, function(){

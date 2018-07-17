@@ -1,0 +1,11 @@
+<% include ./partials/header %>
+
+<h2>New list</h2>
+<form action='/user/<%= user._id %>/lists/' method='POST'>
+    <input type='text' name='newList[name]' placeholder="Name of list"></input>
+    <input type='text' name='newList[summary]' placeholder='Summary'></input>
+    <button class='btn'>Submit</button>
+</form>
+
+
+<% include ./partials/footer %>
