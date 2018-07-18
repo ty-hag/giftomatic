@@ -14,7 +14,7 @@ var express = require('express'),
     seedDB = require('./seed_callbacks');
 
 mongoose.connect("mongodb://localhost/giftOMatic");
-seedDB();
+//seedDB();
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended:true}));
@@ -139,7 +139,8 @@ app.get('/user/:id/lists', isLoggedIn, function(req, res){
             console.log(err)
             res.redirect(`/`) //!@! change this later
         } else {
-            res.render('lists', {user: foundUser}); //!@! list page shows no lists
+            console.log('foundUser: ', foundUser);
+            res.render('lists', {user: foundUser});
         }
     })
 })
@@ -160,7 +161,7 @@ app.get('/user/:id/lists/new', isLoggedIn, function(req, res){
 
 // LIST - CREATE
 app.post('/user/:id/lists', isLoggedIn, function(req, res){
-    console.log(`req.body.newList = ${req.body.newList}`);
+    let listToCreate = req.body.newList;
     Wishlist.create(req.body.newList, function(err, newList){
         if(err){
             console.log(err);
@@ -170,7 +171,8 @@ app.post('/user/:id/lists', isLoggedIn, function(req, res){
                 if(err){
                     console.log(err);
                 } else {
-                    foundUser.myLists.push(newList);
+                    foundUser.myLists.push(newList._id);
+                    foundUser.save();
                     res.redirect(`/user/${req.params.id}/lists/${newList._id}`);
                 }
             })

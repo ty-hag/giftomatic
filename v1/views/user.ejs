@@ -2,8 +2,8 @@
 
 <h1><%= user.firstName %> <%= user.lastName %></h1>
 
-<div>My lists</div>
-<div>Add a list</div>
+<div><a href="/user/<%= user._id %>/lists/">My lists</a></div>
+<div><a href="/user/<%= user._id %>/lists/new">Add a list</a></div>
 <div>Search for friends</div>
 <div>Updates</div>
 

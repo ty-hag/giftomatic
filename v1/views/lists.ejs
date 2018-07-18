@@ -2,7 +2,7 @@
 
 <div id="wishlists">
     <% user.myLists.forEach(function(list){ %> <!-- this might be broken, change to list.forEach and check routes? -->
-        <a href="/lists/<%= list._id %>">
+        <a href="/user/<%= user._id %>/lists/<%= list._id %>">
             <div class="wishlist">
                 <div><%= list.name %></div>
                 <div><%= list.summary %></div>
