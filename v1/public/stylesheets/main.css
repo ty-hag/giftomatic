@@ -31,6 +31,7 @@ a {
 header {
     background-color: black;
     color: white;
+    padding: 10px;
 }
 
 a {
@@ -38,11 +39,40 @@ a {
     color: inherit;
 }
 
+.gifto-logo{
+    height: 5px;
+    width: 5px;
+}
+
+/*--------------- FOOTER ---------------------- */
+#footer-container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+#footer {
+    font-size: 8pt;
+    color: white;
+    background-color: #f9f9f9;
+    padding: 5px;
+    display: inline;
+    border-radius: 3px;
+}
+
 /* --------------  LANDING PAGE  ----------------*/
+
+#landing-container {
+    text-align: center;
+}
 
 #landing-title{
     font-size: 50pt;
     text-align: center;
+}
+
+#giftomatic-logo {
+    height: 100px;
+    width: 100px;
 }
 
 #skull-landing{
@@ -80,7 +110,6 @@ a {
 
 #new-item-form {
     display:none;
-    background-color: gray;
 }
 
 .wishlist-item {

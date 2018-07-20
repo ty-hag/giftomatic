@@ -20,7 +20,6 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
-app.use(express.static("public"));
 
 // PASSPORT CONFIG
 app.use(require('express-session')({
@@ -181,14 +180,13 @@ app.post('/user/:id/lists', isLoggedIn, function(req, res){
 })
 
 // LIST - SHOW
-app.get('/user/:user_id/lists/:list_id', function(req, res){
+app.get('/user/:user_id/lists/:list_id', isLoggedIn, function(req, res){
     Wishlist.findById(req.params.list_id).populate('items').exec(function(err, foundList){
         if(err){
             console.log(err);
             res.redirect("/lists");
         } else {
             //route works but list is not populating!
-            console.log('foundlist: ', foundList);
             res.render('wishlist_items', {list: foundList});
         }
     });
@@ -209,25 +207,28 @@ app.get('/items', isLoggedIn, function(req, res){
 });
 
 // ITEM - CREATE
-app.post('/items', function(req, res){
+app.post('user/:user_id/lists/:list_id/items', isLoggedIn, function(req, res){
     let newItem = req.body.wishlistItem;
     WishlistItem.create(newItem, function(err, newlyCreatedItem){
         if(err){
             console.log(err);
         } else {
-            res.json(newlyCreatedItem);
+            Wishlist.findById(req.params.list_id, function(err, foundList){
+                if(err){
+                    console.log(err);
+                } else {
+                    foundList.items.push(newlyCreatedItem);
+                    foundList.save();
+                    res.json(newlyCreatedItem);
+                }
+            });
         }
     });
 });
 
-// ITEM - NEW -- No longer needed
-app.get('/items/new', function(req, res){
-    res.render("new");
-});
-
 // ITEM - SHOW
-app.get('/items/:id', function(req, res){
-    WishlistItem.findById(req.params.id).populate("comments").exec(function(err, foundItem){
+app.get('user/:user_id/lists/:list_id/items/:item_id', function(req, res){
+    WishlistItem.findById(req.params.item_id).populate("comments").exec(function(err, foundItem){
         if(err){
             console.log(err);
         } else {
@@ -239,7 +240,7 @@ app.get('/items/:id', function(req, res){
 // ITEM - UPDATE
 
 // ITEM - DELETE
-app.delete('/items/:id', function(req, res){
+app.delete('user/:user_id/lists/:list_id/items/:item_id', function(req, res){
     // First find the item you want to delete
     WishlistItem.findById(req.params.id, function(err, foundItem){
         if(err){

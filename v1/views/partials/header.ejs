@@ -4,6 +4,9 @@
 </head>  
 <body>
 <header>
+    <!-- router prefix thingy is messing up the src path by adding "user" to it-->
+    <!--<img class="gifto-icon" src="gifto_logo.svg" height="20px" width="20px">-->
+
     <% if(!currentUser){ %>
         <a href='/register'>Register</a>
         <a href='/login'>Login</a>
@@ -11,4 +14,6 @@
         Hello, <%= currentUser.firstName %>
         <a href='/logout'>Logout</a>
     <% } %>
+
+
 </header>

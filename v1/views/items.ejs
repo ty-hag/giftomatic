@@ -3,7 +3,7 @@
 <h1>Wishlist</h1>
 
 <div id="wishlist">
-    <% wishlistItems.forEach(function(item){ %>
+    <% list.items.forEach(function(item){ %>
         <a class="item-link" href="/items/<%= item._id %>">
             <div class="wishlist-item">
                 <div class="wishlist-title">
@@ -23,7 +23,7 @@
     <input type='text' class='input-new' name="wishlistItem[price]" placeholder="Price"></input>
     <input type='text' class='input-new' name="wishlistItem[link]" placeholder="Link"></input>
     <textarea class='input-new' name="wishlistItem[notes]" placeholder="notes"></textarea>
-    <button class="input-new btn">Add it!</button>  <span  class='btn' id='cancel-add-item'>Cancel</span>
+    <button class="input-new btn">Add it!</button>  <span  class='btn' id='cancel-add-item'>Close</span>
 </form>
 
 <% include ./partials/footer.ejs %>

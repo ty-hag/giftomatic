@@ -30,7 +30,8 @@ $('#show-item-form').on('click', function(){
     }
 });
 
-$('#cancel-add-item').on('click', function(){
+$('#close-add-item').on('click', function(){
+    $('#new-item-form input').val('');
     $('#new-item-form').toggle();
 })
 
@@ -56,7 +57,9 @@ $('#new-item-form').submit(function(e){
         <span class="purchaseStatus ${item.purchaseStatus}">${item.purchaseStatus}</span>
     </div>
 </a>
-                `)
+            `)
+           //$('#new-item-form').toggle();
+            $('#new-item-form input').val('');
         }
     })
 })
