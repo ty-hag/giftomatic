@@ -11,6 +11,7 @@ var express = require('express'),
     bodyParser = require("body-parser"),
     methodOverride = require("method-override"),
     userRoutes = require('./routes/routes_user'),
+    listRoutes = require('./routes/routes_list'),
     seedDB = require('./seed_callbacks');
 
 mongoose.connect("mongodb://localhost/giftOMatic");
@@ -41,11 +42,9 @@ app.use(function(req, res, next){
 
 // Router
 app.use('/user', userRoutes);
+app.use('/user/:user_id/lists', listRoutes);
 
 ///============== ROUTES ========================
-app.get('/', function(req, res){
-    res.render("landing");
-});
 
 // --------------- LANDING PAGE ---------------
 
@@ -132,71 +131,71 @@ app.get('/logout', function(req, res){
 // });
 
 // USER THEN LIST // !@! don't know if this works, need to add ability for users to add lists
-app.get('/user/:id/lists', isLoggedIn, function(req, res){
-    User.findById(req.params.id).populate('myLists').exec(function(err, foundUser){
-        if(err){
-            console.log(err)
-            res.redirect(`/`) //!@! change this later
-        } else {
-            console.log('foundUser: ', foundUser);
-            res.render('lists', {user: foundUser});
-        }
-    })
-})
+// app.get('/user/:id/lists', isLoggedIn, function(req, res){
+//     User.findById(req.params.id).populate('myLists').exec(function(err, foundUser){
+//         if(err){
+//             console.log(err)
+//             res.redirect(`/`) //!@! change this later
+//         } else {
+//             console.log('foundUser: ', foundUser);
+//             res.render('lists', {user: foundUser});
+//         }
+//     })
+// })
 
-// LIST - NEW
-app.get('/user/:id/lists/new', isLoggedIn, function(req, res){
-    User.findById(req.params.id, function(err, foundUser){
-        if(err){
-            console.log(err);
-            res.redirect('/') //!@! change this later
-        } else {
-            // passing user despite the fact that it should always be currentUser, never any other user
-            // UNLESS we allow users to create lists for others (ie parent for child)
-            res.render('newList', {user: foundUser});
-        }
-    })
-});
+// // LIST - NEW
+// app.get('/user/:id/lists/new', isLoggedIn, function(req, res){
+//     User.findById(req.params.id, function(err, foundUser){
+//         if(err){
+//             console.log(err);
+//             res.redirect('/') //!@! change this later
+//         } else {
+//             // passing user despite the fact that it should always be currentUser, never any other user
+//             // UNLESS we allow users to create lists for others (ie parent for child)
+//             res.render('newList', {user: foundUser});
+//         }
+//     })
+// });
 
-// LIST - CREATE
-app.post('/user/:id/lists', isLoggedIn, function(req, res){
-    let listToCreate = req.body.newList;
-    Wishlist.create(req.body.newList, function(err, newList){
-        if(err){
-            console.log(err);
-            res.redirect(`/user/${req.params.id}/lists/new`);
-        } else {
-            User.findById(req.params.id, function(err, foundUser){
-                if(err){
-                    console.log(err);
-                } else {
-                    foundUser.myLists.push(newList._id);
-                    foundUser.save();
-                    res.redirect(`/user/${req.params.id}/lists/${newList._id}`);
-                }
-            })
-        }
-    })
-})
+// // LIST - CREATE
+// app.post('/user/:id/lists', isLoggedIn, function(req, res){
+//     let listToCreate = req.body.newList;
+//     Wishlist.create(req.body.newList, function(err, newList){
+//         if(err){
+//             console.log(err);
+//             res.redirect(`/user/${req.params.id}/lists/new`);
+//         } else {
+//             User.findById(req.params.id, function(err, foundUser){
+//                 if(err){
+//                     console.log(err);
+//                 } else {
+//                     foundUser.myLists.push(newList._id);
+//                     foundUser.save();
+//                     res.redirect(`/user/${req.params.id}/lists/${newList._id}`);
+//                 }
+//             })
+//         }
+//     })
+// })
 
-// LIST - SHOW
-app.get('/user/:user_id/lists/:list_id', isLoggedIn, function(req, res){
-    Wishlist.findById(req.params.list_id).populate('items').exec(function(err, foundList){
-        if(err){
-            console.log(err);
-            res.redirect("/lists");
-        } else {
-            User.findById(req.params.user_id, function(err, foundUser){
-                if(err){
-                    console.log(err);
-                    res.redirect('/');
-                } else {
-                    res.render('wishlist_items', {list: foundList, user: foundUser});
-                }
-            })
-        }
-    });
-});
+// // LIST - SHOW
+// app.get('/user/:user_id/lists/:list_id', isLoggedIn, function(req, res){
+//     Wishlist.findById(req.params.list_id).populate('items').exec(function(err, foundList){
+//         if(err){
+//             console.log(err);
+//             res.redirect("/lists");
+//         } else {
+//             User.findById(req.params.user_id, function(err, foundUser){
+//                 if(err){
+//                     console.log(err);
+//                     res.redirect('/');
+//                 } else {
+//                     res.render('wishlist_items', {list: foundList, user: foundUser});
+//                 }
+//             })
+//         }
+//     });
+// });
 
 // --------------- ITEM ROUTES ---------------
 
@@ -320,6 +319,8 @@ app.post('/items/:id/comments', function(req, res){
         if(err){
             console.log(err);
         } else {
+            newComment.author = req.user;
+            newComment.save();
             WishlistItem.findById(req.params.id, function(err, itemToUpdate){
                 if(err){
                     console.log(err);

@@ -13,11 +13,14 @@ $('#add-comment-form').submit(function(e){
         type: 'POST',
         dataType: 'json',
         success: function(data){
-            console.log('returned json:', data);
-            
+            var timestamp = new Date(data.createdAt).toLocaleDateString('en-US');
+            console.log('timestamps \n', timestamp);
             $('#comment-list').append(
                 `
-                <div>${data.text}<div>
+                <div class='show-item-comment'>
+                    ${data.text}
+                    <div class='comment-author'> - ${data.author.firstName} ${data.author.lastName}, ${timestamp}</div>
+                </div>
                 `)
             $('#add-comment-form textarea').val('');
         }    
@@ -65,6 +68,7 @@ $('#new-item-form').submit(function(e){
             `)
            //$('#new-item-form').toggle();
             $('#new-item-form input').val('');
+            $('#new-item-form textarea').val('');
         }
     })
 })

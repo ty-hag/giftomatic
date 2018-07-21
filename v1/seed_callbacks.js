@@ -62,20 +62,20 @@ var userData = [
 ];
 
 function seedDB(){
-    User.remove({},function(err){
-        if(err){
-            console.log(err);
-        } else {
-            console.log("Removed users.")
-            User.create(userData, function(err){
-                if(err){
-                    console.log(err);
-                } else {
-                    console.log("Added user seed data.");
-                }
-            })
-        }
-    })
+    // User.remove({},function(err){
+    //     if(err){
+    //         console.log(err);
+    //     } else {
+    //         console.log("Removed users.")
+    //         User.create(userData, function(err){
+    //             if(err){
+    //                 console.log(err);
+    //             } else {
+    //                 console.log("Added user seed data.");
+    //             }
+    //         })
+    //     }
+    // })
     //remove all wishlist items
     WishlistItem.remove({}, function(err){
         if(err){

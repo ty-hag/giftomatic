@@ -145,6 +145,11 @@ a {
     background-color: #d10f0f;
 }
 
+.comment-author {
+    font-size: 0.8em;
+    color: #878787;
+}
+
 /* --------------  WISHLIST NEW PAGE  ----------------*/
 .input-new {
     display: block;

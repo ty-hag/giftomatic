@@ -15,7 +15,10 @@
         <h3>Comments</h3>
         <div id='comment-list'>
             <% item.comments.forEach(function(comment){ %>
-                <div class='show-item-comment'><%= comment.text %></div>
+                <div class='show-item-comment'>
+                    <%= comment.text %>
+                    <div class='comment-author'> - <%= comment.author.firstName %> <%= comment.author.lastName %>, <%= comment.createdAt.toLocaleDateString('en-US') %></div>
+                </div>
             <% }); %>
         </div>
         <div>
