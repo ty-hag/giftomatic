@@ -38,6 +38,9 @@ $('#close-add-item').on('click', function(){
 $('#new-item-form').submit(function(e){
     e.preventDefault();
     
+    var user_id = $('#user_id').attr('class');
+    var list_id = $('#list_id').attr('class');
+    
     var actionUrl = $(this).attr('action');
     var formData = $(this).serialize();
     $.ajax({
@@ -45,10 +48,12 @@ $('#new-item-form').submit(function(e){
         data: formData,
         type: 'POST',
         dataType: 'json',
-        success: function(item){
+        //fix href below to match new routing, need to get userid in somehow
+        //perhaps in some element's attribute
+        success: function(item){ 
             $('#wishlist').append(
                 `
-<a class="item-link" href="/items/${item._id}">
+<a class="item-link" href="/user/${user_id}/lists/${list_id}/items/${item._id}">
     <div class="wishlist-item">
         <div class="wishlist-title">
             ${item.name}

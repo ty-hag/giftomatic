@@ -1,10 +1,12 @@
 <% include ./partials/header.ejs %>
 
 <h1><%= list.name %></h1>
+<div id='user_id' class='<%= user._id %>'></div>
+<div id='list_id' class='<%= list._id %>'></div>
 
 <div id="wishlist">
     <% list.items.forEach(function(item){ %>
-        <a class="item-link" href="lists/<%= list._id %>/items/<%= item._id %>">
+        <a class="item-link" href="/user/<%= user._id %>/lists/<%= list._id %>/items/<%= item._id %>">
             <div class="wishlist-item">
                 <div class="wishlist-title">
                     <%= item.name %>
@@ -20,7 +22,7 @@
 
 <span class='btn' id='show-item-form'>Add new item</span>
 
-<form id='new-item-form' action="/lists/<%= list._id %>/items" method="POST">
+<form id='new-item-form' action="/user/<%= user._id %>/lists/<%= list._id %>/items" method="POST">
     <input type='text' class='input-new' name="wishlistItem[name]" placeholder="Name of item, description..."></input>
     <input type='text' class='input-new' name="wishlistItem[price]" placeholder="Price"></input>
     <input type='text' class='input-new' name="wishlistItem[link]" placeholder="Link"></input>

@@ -186,8 +186,14 @@ app.get('/user/:user_id/lists/:list_id', isLoggedIn, function(req, res){
             console.log(err);
             res.redirect("/lists");
         } else {
-            //route works but list is not populating!
-            res.render('wishlist_items', {list: foundList});
+            User.findById(req.params.user_id, function(err, foundUser){
+                if(err){
+                    console.log(err);
+                    res.redirect('/');
+                } else {
+                    res.render('wishlist_items', {list: foundList, user: foundUser});
+                }
+            })
         }
     });
 });
@@ -207,7 +213,7 @@ app.get('/items', isLoggedIn, function(req, res){
 });
 
 // ITEM - CREATE
-app.post('user/:user_id/lists/:list_id/items', isLoggedIn, function(req, res){
+app.post('/user/:user_id/lists/:list_id/items', isLoggedIn, function(req, res){
     let newItem = req.body.wishlistItem;
     WishlistItem.create(newItem, function(err, newlyCreatedItem){
         if(err){
@@ -227,22 +233,39 @@ app.post('user/:user_id/lists/:list_id/items', isLoggedIn, function(req, res){
 });
 
 // ITEM - SHOW
-app.get('user/:user_id/lists/:list_id/items/:item_id', function(req, res){
+app.get('/user/:user_id/lists/:list_id/items/:item_id', function(req, res){
+
     WishlistItem.findById(req.params.item_id).populate("comments").exec(function(err, foundItem){
         if(err){
             console.log(err);
+            res.redirect('/');
         } else {
-            res.render('show', {item:foundItem});
+            User.findById(req.params.user_id).populate('myLists').exec(function(err, foundUser){
+                if(err){
+                    console.log(err)
+                    res.redirect('/');
+                } else {
+                    Wishlist.findById(req.params.list_id, function(err, foundList){
+                        if(err){
+                            console.log(err);
+                            res.redirect('/');
+                        } else {
+                            res.render('show', {item:foundItem, user:foundUser, list: foundList});
+                        }
+                    })
+                }
+            })
+            
         }
     });
 });
 
 // ITEM - UPDATE
 
-// ITEM - DELETE
-app.delete('user/:user_id/lists/:list_id/items/:item_id', function(req, res){
+// ITEM - DELETE !@! Need to update route in ejs file
+app.delete('/user/:user_id/lists/:list_id/items/:item_id', function(req, res){
     // First find the item you want to delete
-    WishlistItem.findById(req.params.id, function(err, foundItem){
+    WishlistItem.findById(req.params.item_id, function(err, foundItem){
         if(err){
             console.log(err);
         } else if (foundItem.comments){
@@ -256,12 +279,12 @@ app.delete('user/:user_id/lists/:list_id/items/:item_id', function(req, res){
         }
     });
         
-    WishlistItem.findByIdAndRemove(req.params.id, function(err, item){
+    WishlistItem.findByIdAndRemove(req.params.item_id, function(err, item){
         if(err){
             console.log(err);
         } else {
             console.log(`'${item.name}' deleted.`);
-            res.redirect('/items');
+            res.redirect(`/user/${req.params.user_id}/lists/${req.params.list_id}`);
         }
     });
 });
