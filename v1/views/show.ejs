@@ -16,13 +16,13 @@
         <div id='comment-list'>
             <% item.comments.forEach(function(comment){ %>
                 <div class='show-item-comment'>
-                    <%= comment.text %>
+                    <pre><%= comment.text %></pre>
                     <div class='comment-author'> - <%= comment.author.firstName %> <%= comment.author.lastName %>, <%= comment.createdAt.toLocaleDateString('en-US') %></div>
                 </div>
             <% }); %>
         </div>
         <div>
-            <form id='add-comment-form' action='/items/<%= item._id %>/comments' method="POST">
+            <form id='add-comment-form' action='/user/<%= user._id %>/lists/<%= list._id %>/items/<%= item._id %>/comments/' method="POST">
                 <textarea name='comment[text]'></textarea>
                 <button id='add-comment-btn' class='btn'>Add Comment</button>
             </form>

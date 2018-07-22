@@ -12,6 +12,7 @@
         <a href='/login'>Login</a>
     <% } else { %>
         Hello, <%= currentUser.firstName %>
+        <a href='/user/<%= currentUser._id %>'>Home</a>
         <a href='/logout'>Logout</a>
     <% } %>
 

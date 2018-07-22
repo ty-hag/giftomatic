@@ -12,6 +12,8 @@ var express = require('express'),
     methodOverride = require("method-override"),
     userRoutes = require('./routes/routes_user'),
     listRoutes = require('./routes/routes_list'),
+    itemRoutes = require('./routes/routes_item'),
+    commentRoutes = require('./routes/routes_comment'),
     seedDB = require('./seed_callbacks');
 
 mongoose.connect("mongodb://localhost/giftOMatic");
@@ -43,6 +45,8 @@ app.use(function(req, res, next){
 // Router
 app.use('/user', userRoutes);
 app.use('/user/:user_id/lists', listRoutes);
+app.use('/user/:user_id/lists/:list_id/items', itemRoutes);
+app.use('/user/:user_id/lists/:list_id/items/:id/comments', commentRoutes);
 
 ///============== ROUTES ========================
 
@@ -199,141 +203,131 @@ app.get('/logout', function(req, res){
 
 // --------------- ITEM ROUTES ---------------
 
-// ITEM - INDEX
-app.get('/items', isLoggedIn, function(req, res){
-    WishlistItem.find({}, function(err, allWishlistItems){
-        if(err){
-            res.send("error");
-            console.log(err);
-        } else {
-            res.render("items", {wishlistItems:allWishlistItems});
-        }
-    });
-});
+// ITEM - INDEX - NOT BEING USED!
+// app.get('/items', isLoggedIn, function(req, res){
+//     WishlistItem.find({}, function(err, allWishlistItems){
+//         if(err){
+//             res.send("error");
+//             console.log(err);
+//         } else {
+//             res.render("items", {wishlistItems:allWishlistItems});
+//         }
+//     });
+// });
 
-// ITEM - CREATE
-app.post('/user/:user_id/lists/:list_id/items', isLoggedIn, function(req, res){
-    let newItem = req.body.wishlistItem;
-    WishlistItem.create(newItem, function(err, newlyCreatedItem){
-        if(err){
-            console.log(err);
-        } else {
-            Wishlist.findById(req.params.list_id, function(err, foundList){
-                if(err){
-                    console.log(err);
-                } else {
-                    foundList.items.push(newlyCreatedItem);
-                    foundList.save();
-                    res.json(newlyCreatedItem);
-                }
-            });
-        }
-    });
-});
+// // ITEM - CREATE
+// app.post('/user/:user_id/lists/:list_id/items', isLoggedIn, function(req, res){
+//     let newItem = req.body.wishlistItem;
+//     WishlistItem.create(newItem, function(err, newlyCreatedItem){
+//         if(err){
+//             console.log(err);
+//         } else {
+//             Wishlist.findById(req.params.list_id, function(err, foundList){
+//                 if(err){
+//                     console.log(err);
+//                 } else {
+//                     foundList.items.push(newlyCreatedItem);
+//                     foundList.save();
+//                     res.json(newlyCreatedItem);
+//                 }
+//             });
+//         }
+//     });
+// });
 
-// ITEM - SHOW
-app.get('/user/:user_id/lists/:list_id/items/:item_id', function(req, res){
+// // ITEM - SHOW
+// app.get('/user/:user_id/lists/:list_id/items/:item_id', function(req, res){
 
-    WishlistItem.findById(req.params.item_id).populate("comments").exec(function(err, foundItem){
-        if(err){
-            console.log(err);
-            res.redirect('/');
-        } else {
-            User.findById(req.params.user_id).populate('myLists').exec(function(err, foundUser){
-                if(err){
-                    console.log(err)
-                    res.redirect('/');
-                } else {
-                    Wishlist.findById(req.params.list_id, function(err, foundList){
-                        if(err){
-                            console.log(err);
-                            res.redirect('/');
-                        } else {
-                            res.render('show', {item:foundItem, user:foundUser, list: foundList});
-                        }
-                    })
-                }
-            })
+//     WishlistItem.findById(req.params.item_id).populate("comments").exec(function(err, foundItem){
+//         if(err){
+//             console.log(err);
+//             res.redirect('/');
+//         } else {
+//             User.findById(req.params.user_id).populate('myLists').exec(function(err, foundUser){
+//                 if(err){
+//                     console.log(err)
+//                     res.redirect('/');
+//                 } else {
+//                     Wishlist.findById(req.params.list_id, function(err, foundList){
+//                         if(err){
+//                             console.log(err);
+//                             res.redirect('/');
+//                         } else {
+//                             res.render('show', {item:foundItem, user:foundUser, list: foundList});
+//                         }
+//                     })
+//                 }
+//             })
             
-        }
-    });
-});
+//         }
+//     });
+// });
 
-// ITEM - UPDATE
+// // ITEM - UPDATE
 
-// ITEM - DELETE !@! Need to update route in ejs file
-app.delete('/user/:user_id/lists/:list_id/items/:item_id', function(req, res){
-    // First find the item you want to delete
-    WishlistItem.findById(req.params.item_id, function(err, foundItem){
-        if(err){
-            console.log(err);
-        } else if (foundItem.comments){
-            foundItem.comments.forEach(function(comment){
-                Comment.findByIdAndRemove(comment._id, function(err){
-                    if(err){
-                        console.log(err);
-                    } 
-                });
-            });
-        }
-    });
+// // ITEM - DELETE !@! Need to update route in ejs file
+// app.delete('/user/:user_id/lists/:list_id/items/:item_id', function(req, res){
+//     // First find the item you want to delete
+//     WishlistItem.findById(req.params.item_id, function(err, foundItem){
+//         if(err){
+//             console.log(err);
+//         } else if (foundItem.comments){
+//             foundItem.comments.forEach(function(comment){
+//                 Comment.findByIdAndRemove(comment._id, function(err){
+//                     if(err){
+//                         console.log(err);
+//                     } 
+//                 });
+//             });
+//         }
+//     });
         
-    WishlistItem.findByIdAndRemove(req.params.item_id, function(err, item){
-        if(err){
-            console.log(err);
-        } else {
-            console.log(`'${item.name}' deleted.`);
-            res.redirect(`/user/${req.params.user_id}/lists/${req.params.list_id}`);
-        }
-    });
-});
-    
-
-    
-    // WishlistItem.findByIdAndRemove(req.params.id, function(err){
-    //     if(err){
-    //         res.redirect('/items'); //!@! This needs an error message or something
-    //     } else {
-    //         res.redirect('/items');
-    //     }
-    // });
+//     WishlistItem.findByIdAndRemove(req.params.item_id, function(err, item){
+//         if(err){
+//             console.log(err);
+//         } else {
+//             console.log(`'${item.name}' deleted.`);
+//             res.redirect(`/user/${req.params.user_id}/lists/${req.params.list_id}`);
+//         }
+//     });
+// });
 
 // --------------- COMMENT ROUTES ---------------
 
 // COMMENT - NEW
-app.get('/items/:id/comments/new', function(req, res){
-    WishlistItem.findById(req.params.id, function(err, foundItem){
-        if(err){
-            console.log(err);
-            res.redirect('/items');
-        } else {
-            res.render('newComment', {item: foundItem});
-        }
-    });
-});
+// app.get('/items/:id/comments/new', function(req, res){
+//     WishlistItem.findById(req.params.id, function(err, foundItem){
+//         if(err){
+//             console.log(err);
+//             res.redirect('/items');
+//         } else {
+//             res.render('newComment', {item: foundItem});
+//         }
+//     });
+// });
 
-// COMMENT - CREATE
-app.post('/items/:id/comments', function(req, res){
+// // COMMENT - CREATE
+// app.post('/items/:id/comments', function(req, res){
     
-    Comment.create(req.body.comment, function(err, newComment){
-        if(err){
-            console.log(err);
-        } else {
-            newComment.author = req.user;
-            newComment.save();
-            WishlistItem.findById(req.params.id, function(err, itemToUpdate){
-                if(err){
-                    console.log(err);
-                }else{
-                    itemToUpdate.comments.push(newComment);
-                    itemToUpdate.save();
-                    res.json(newComment);
-                    console.log(`Comment added to '${itemToUpdate.name}'.`);
-                }
-            });
-        }
-    });
-});
+//     Comment.create(req.body.comment, function(err, newComment){
+//         if(err){
+//             console.log(err);
+//         } else {
+//             newComment.author = req.user;
+//             newComment.save();
+//             WishlistItem.findById(req.params.id, function(err, itemToUpdate){
+//                 if(err){
+//                     console.log(err);
+//                 }else{
+//                     itemToUpdate.comments.push(newComment);
+//                     itemToUpdate.save();
+//                     res.json(newComment);
+//                     console.log(`Comment added to '${itemToUpdate.name}'.`);
+//                 }
+//             });
+//         }
+//     });
+// });
 
 //------------ LOGIN MIDDLEWARE ---------------------
 function isLoggedIn(req, res, next){

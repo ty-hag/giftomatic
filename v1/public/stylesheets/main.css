@@ -26,6 +26,13 @@ a {
     background-color: #b74b40;
 }
 
+pre {
+    font-family: Arial;
+    padding: inherit;
+    margin: inherit;
+    line-height: inherit;
+}
+
 /* ----------- HEADER ------------------- */
 
 header {
@@ -133,7 +140,7 @@ a {
     color: white;
 }
 
-.open {
+.unclaimed {
     background-color: #70d10f;
 }
 
@@ -148,6 +155,13 @@ a {
 .comment-author {
     font-size: 0.8em;
     color: #878787;
+}
+
+.show-item-comment {
+    margin: 5px 0;
+    background-color: #e5e5e5;
+    padding: 3px;
+    border-radius: 3px;
 }
 
 /* --------------  WISHLIST NEW PAGE  ----------------*/

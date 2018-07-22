@@ -3,6 +3,8 @@ console.log('ajax file loaded');
 $('#add-comment-form').submit(function(e){
     e.preventDefault();
     
+    console.log("Comment form submitted!");
+    
     var actionUrl = $(this).attr('action');
     var formData = $(this).serialize();
     console.log(formData);
@@ -13,12 +15,13 @@ $('#add-comment-form').submit(function(e){
         type: 'POST',
         dataType: 'json',
         success: function(data){
+            console.log('SUCCESS!')
             var timestamp = new Date(data.createdAt).toLocaleDateString('en-US');
             console.log('timestamps \n', timestamp);
             $('#comment-list').append(
                 `
                 <div class='show-item-comment'>
-                    ${data.text}
+                    <pre>${data.text}</pre>
                     <div class='comment-author'> - ${data.author.firstName} ${data.author.lastName}, ${timestamp}</div>
                 </div>
                 `)

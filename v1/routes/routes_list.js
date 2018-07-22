@@ -9,7 +9,6 @@ router.get('/', isLoggedIn, function(req, res){
             console.log(err)
             res.redirect(`/`) //!@! change this later
         } else {
-            console.log('foundUser: ', foundUser);
             res.render('lists', {user: foundUser});
         }
     })
