@@ -4,7 +4,7 @@ var wishlistSchema = new mongoose.Schema(
     {
         name: String,
         summary: String,
-        owner: {type: String, default: "Yadly"},
+        owner: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
         items: [
             {
                 type: mongoose.Schema.Types.ObjectId,

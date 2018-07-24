@@ -30,12 +30,13 @@ router.get('/new', isLoggedIn, function(req, res){
 
 // LIST - CREATE
 router.post('/', isLoggedIn, function(req, res){
-    let listToCreate = req.body.newList;
     Wishlist.create(req.body.newList, function(err, newList){
         if(err){
             console.log(err);
             res.redirect(`/user/${req.params.user_id}/lists/new`);
         } else {
+            newList.owner = req.user;
+            newList.save();
             User.findById(req.params.user_id, function(err, foundUser){
                 if(err){
                     console.log(err);

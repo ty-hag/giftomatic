@@ -13,11 +13,12 @@ var express = require('express'),
     userRoutes = require('./routes/routes_user'),
     listRoutes = require('./routes/routes_list'),
     itemRoutes = require('./routes/routes_item'),
+    searchRoutes = require('./routes/routes_search'),
     commentRoutes = require('./routes/routes_comment'),
     seedDB = require('./seed_callbacks');
 
 mongoose.connect("mongodb://localhost/giftOMatic");
-//seedDB();
+seedDB();
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended:true}));
@@ -47,6 +48,7 @@ app.use('/user', userRoutes);
 app.use('/user/:user_id/lists', listRoutes);
 app.use('/user/:user_id/lists/:list_id/items', itemRoutes);
 app.use('/user/:user_id/lists/:list_id/items/:id/comments', commentRoutes);
+app.use('/search', searchRoutes);
 
 ///============== ROUTES ========================
 

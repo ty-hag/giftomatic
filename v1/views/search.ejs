@@ -1,0 +1,9 @@
+<% include ./partials/header %>
+
+<% searchResults.forEach(function(user){ %>
+    <div class='user-search-result'>
+        <div class='user-result name'><%= user.firstName %> <%= user.lastName %></div>
+    </div>
+<% }) %>
+
+<% include ./partials/footer %>
