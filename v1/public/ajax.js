@@ -1,5 +1,41 @@
 console.log('ajax file loaded');
 
+//-------------- ITEM PAGE-----------------
+
+//set purchase status with respect to buttons
+$(document).ready(function(){
+    if($('#purchase-status-value').val()){
+        let purchaseStatus = $('#purchase-status-value').val();
+        $('.selected').toggleClass('selected');
+        $(`#${purchaseStatus.toLowerCase()}`).toggleClass('selected');
+    }
+})
+
+$('.item-status-button').on('click', function(e){
+    e.preventDefault();
+    
+    $('.selected').toggleClass('selected');
+    $(this).toggleClass('selected');
+    
+    let newStatus = $(this).html();
+    let actionUrl = $('#item-status-form').attr('action');
+    
+    $.ajax({
+        url: actionUrl,
+        data: {purchaseStatus: newStatus},
+        type: 'PUT',
+        success: function(data){
+            console.log('Item status updated!');
+        }
+    })
+});
+
+// $('.item-status-button').on('mouseout', function(){
+//     $(this).on('hover', function(){
+//         $(this).css('background-color', '#c8c8c8');
+//     });
+// });
+
 $('#add-comment-form').submit(function(e){
     e.preventDefault();
     
@@ -41,6 +77,8 @@ $('#close-add-item').on('click', function(){
     $('#new-item-form').toggle();
 })
 
+//-------------- LIST PAGE -------------------
+// Add new item form
 $('#new-item-form').submit(function(e){
     e.preventDefault();
     

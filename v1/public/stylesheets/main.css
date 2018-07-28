@@ -1,3 +1,16 @@
+/*
+main orange: #ff7c1e
+light orange: #ffc9a3
+
+main blue: #44c0ff
+light blue: #a3e0ff
+
+main gray: #cccccc
+light gray: #e2e2e2
+
+*/
+
+
 /* --------------  GENERAL ----------------*/
 
 body {
@@ -36,9 +49,10 @@ pre {
 /* ----------- HEADER ------------------- */
 
 header {
-    background-color: black;
+    background-color: #ff7c1e;
     color: white;
     padding: 10px;
+    border-radius: 3px;
 }
 
 a {
@@ -82,25 +96,25 @@ a {
     width: 100px;
 }
 
-#skull-landing{
-    margin: 0 auto;
-    animation-name: skullSpin;
-    animation-duration: 3s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-}
+/*#skull-landing{*/
+/*    margin: 0 auto;*/
+/*    animation-name: skullSpin;*/
+/*    animation-duration: 3s;*/
+/*    animation-timing-function: linear;*/
+/*    animation-iteration-count: infinite;*/
+/*}*/
 
-@keyframes skullSpin{
-    0%{
-        transform: rotate(0deg) scale(1);
-    }
-    50%{
-        transform: rotate(180deg) scale(1.3);
-    }
-    100%{
-        transform: rotate(360deg) scale(1);
-    }
-}
+/*@keyframes skullSpin{*/
+/*    0%{*/
+/*        transform: rotate(0deg) scale(1);*/
+/*    }*/
+/*    50%{*/
+/*        transform: rotate(180deg) scale(1.3);*/
+/*    }*/
+/*    100%{*/
+/*        transform: rotate(360deg) scale(1);*/
+/*    }*/
+/*}*/
 
 /* --------------  WISHLIST LIST PAGE  ----------------*/
 
@@ -134,23 +148,36 @@ a {
     font-size: 1.2em;
 }
 
-.purchaseStatus {
-    border-radius: 3px;
-    padding: 2px;
+#item-status-form {
     color: white;
 }
 
-.unclaimed {
-    background-color: #70d10f;
+.item-status-button {
+    padding: 3px;
+    border-radius: 3px;
+    background-color: #d8d8d8;
+    cursor: pointer;
 }
 
-.claimed {
-    background-color: #d1ad0f;
+/*.item-status-button:hover {*/
+/*    background-color: #c8c8c8;*/
+/*}*/
+
+.selected{
+    background-color: #ffd11c;
 }
 
-.purchased {
-    background-color: #d10f0f;
-}
+/*.unclaimed {*/
+/*    background-color: #70d10f;*/
+/*}*/
+
+/*.claimed {*/
+/*    background-color: #d1ad0f;*/
+/*}*/
+
+/*.purchased {*/
+/*    background-color: #d10f0f;*/
+/*}*/
 
 .comment-author {
     font-size: 0.8em;

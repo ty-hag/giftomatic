@@ -2,12 +2,16 @@
 
     <div class='show-item title'>Item: <%= item.name %></div>
     <div class='show-item price'><%= item.price %></div>
-    <div>
-        <span class='show-item purchaseStatus <%= item.purchaseStatus %>'><%= item.purchaseStatus %></span>
-    </div>
+    Purchase status: <%= item.purchaseStatus %>
+    <form id='item-status-form' action="/user/<%= user._id %>/lists/<%= list._id %>/items/<%= item._id %>?_method=PUT" action="POST?">
+        <input id='purchase-status-value' type="hidden" value="<%= item.purchaseStatus %>">
+        <span class='item-status-button' id='unclaimed'>Unclaimed</span>
+        <span class='item-status-button' id='claimed'>Claimed</span>
+        <span class='item-status-button' id='purchased'>Purchased</span>
+    </form>
+    
     <div class='show-item purchaseLink'><a href='<%= item.link %>'>Available here</a></div>
     <div class='show-item notes'>Notes: <%= item.notes %></div>
-    <% console.log(list) %>
     <% if (currentUser && list.owner.equals(currentUser._id)){ %>
         <form action='/user/<%= user._id %>/lists/<%= list._id %>/items/<%= item._id %>?_method=DELETE' method="POST">
             <button class='btn btn-delete'>Delete item</button>

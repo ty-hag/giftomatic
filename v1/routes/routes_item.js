@@ -6,6 +6,9 @@ var Comment = require('../models/comment');
 
 var router = express.Router({mergeParams:true});
 
+//base route
+//app.use('/user/:user_id/lists/:list_id/items', itemRoutes);
+
 // ITEM - CREATE
 router.post('/', isLoggedIn, function(req, res){
     let newItem = req.body.wishlistItem;
@@ -55,6 +58,21 @@ router.get('/:item_id', function(req, res){
 });
 
 // ITEM - UPDATE
+router.put('/:item_id/', function(req, res){
+    console.log('hit item update route');
+    console.log(req.body);
+    WishlistItem.findById(req.params.item_id, function(err, foundItem){
+        if(err){
+            console.log(err);
+            res.redirect('back');
+        } else {
+            foundItem.purchaseStatus = req.body.purchaseStatus;
+            foundItem.save();
+            console.log(typeof(foundItem));
+            res.json(foundItem);
+        }
+    })
+});
 
 // ITEM - DELETE !@! Need to update route in ejs file
 router.delete('/:item_id', function(req, res){

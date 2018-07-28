@@ -18,7 +18,7 @@ var express = require('express'),
     seedDB = require('./seed_callbacks');
 
 mongoose.connect("mongodb://localhost/giftOMatic");
-seedDB();
+//seedDB();
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended:true}));

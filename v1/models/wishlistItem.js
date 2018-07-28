@@ -12,7 +12,11 @@ var  wishlistItemSchema = new mongoose.Schema(
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Comment'
             }
-        ]
+        ],
+        claimedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
     }
 );
 
