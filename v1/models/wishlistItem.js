@@ -3,7 +3,7 @@ var mongoose = require("mongoose");
 var  wishlistItemSchema = new mongoose.Schema(
     {
         name: String,
-        purchaseStatus: {type: String, default: "unclaimed"},
+        purchaseStatus: {type: String, default: "Unclaimed"},
         link: String,
         price: String,
         notes: String,

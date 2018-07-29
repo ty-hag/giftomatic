@@ -46,20 +46,20 @@ var listData =[
     }
 ];
 
-var userData = [
-    {
-        firstName: `Baddo`,
-        lastName: `Bontsweep`,
-        username: `bb`,
-        password: `password`
-    },
-    {
-        firstName: `Lengor`,
-        lastName: `Amalaama`,
-        username: `ama`,
-        password: `password`
-    },
-];
+// var userData = [
+//     {
+//         firstName: `Baddo`,
+//         lastName: `Bontsweep`,
+//         username: `bb`,
+//         password: `password`
+//     },
+//     {
+//         firstName: `Lengor`,
+//         lastName: `Amalaama`,
+//         username: `ama`,
+//         password: `password`
+//     },
+// ];
 
 function seedDB(){
     // User.remove({},function(err){
@@ -76,6 +76,19 @@ function seedDB(){
     //         })
     //     }
     // })
+    
+    User.find({}, function(err, users){
+        if(err){
+            console.log(err);
+        } else {
+            users.forEach(function(user){
+                user.myLists = [];
+                user.save();
+                console.log("user.myLists after removal: \n", user.myLists);
+            })
+        }
+    })
+    
     //remove all wishlist items
     WishlistItem.remove({}, function(err){
         if(err){

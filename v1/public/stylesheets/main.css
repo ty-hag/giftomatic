@@ -44,6 +44,7 @@ pre {
     padding: inherit;
     margin: inherit;
     line-height: inherit;
+    white-space: pre-wrap;
 }
 
 /* ----------- HEADER ------------------- */
@@ -178,6 +179,11 @@ a {
 /*.purchased {*/
 /*    background-color: #d10f0f;*/
 /*}*/
+
+#claimed-by {
+    color: #d8d8d8;
+    font-size: .7em;
+}
 
 .comment-author {
     font-size: 0.8em;

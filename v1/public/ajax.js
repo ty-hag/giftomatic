@@ -26,6 +26,13 @@ $('.item-status-button').on('click', function(e){
         type: 'PUT',
         success: function(data){
             console.log('Item status updated!');
+            console.log(data)
+            if(data.claimedBy === undefined){
+                $('#claimed-by').html('');
+            } else {
+                console.log('hey');
+                $('#claimed-by').html(`${data.purchaseStatus} by ${data.claimedBy.firstName} ${data.claimedBy.lastName}`);
+            }
         }
     })
 });

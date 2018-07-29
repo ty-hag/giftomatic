@@ -32,7 +32,7 @@ router.post('/', isLoggedIn, function(req, res){
 // ITEM - SHOW
 router.get('/:item_id', function(req, res){
 
-    WishlistItem.findById(req.params.item_id).populate("comments").exec(function(err, foundItem){
+    WishlistItem.findById(req.params.item_id).populate("comments").populate('claimedBy').exec(function(err, foundItem){
         if(err){
             console.log(err);
             res.redirect('/');
@@ -59,16 +59,27 @@ router.get('/:item_id', function(req, res){
 
 // ITEM - UPDATE
 router.put('/:item_id/', function(req, res){
-    console.log('hit item update route');
-    console.log(req.body);
-    WishlistItem.findById(req.params.item_id, function(err, foundItem){
+    
+    WishlistItem.findById(req.params.item_id).populate('claimedBy').exec(function(err, foundItem){
         if(err){
             console.log(err);
             res.redirect('back');
         } else {
+            console.log('req.user: \n', req.user);
+            console.log('foundItem.purchaseStatus: \n', foundItem.purchaseStatus);
+            // Handle user claiming item
+            if(foundItem.purchaseStatus === 'Unclaimed'){
+                foundItem.claimedBy = req.user;
+                foundItem.save();
+            // Handle user reqlinquishing claim to item
+            } else if(req.body.purchaseStatus === 'Unclaimed'){
+                foundItem.claimedBy = undefined;
+                foundItem.save();
+            }
+            // Update item's purchaseStatus
             foundItem.purchaseStatus = req.body.purchaseStatus;
             foundItem.save();
-            console.log(typeof(foundItem));
+            console.log("Currently claimed by: ", foundItem.claimedBy);
             res.json(foundItem);
         }
     })
