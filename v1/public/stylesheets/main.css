@@ -37,6 +37,11 @@ a {
 
 .btn-delete {
     background-color: #b74b40;
+    color: white;
+    border: none;
+    padding: 3px;
+    border-radius: 3px;
+    display: inline;
 }
 
 pre {
@@ -45,6 +50,15 @@ pre {
     margin: inherit;
     line-height: inherit;
     white-space: pre-wrap;
+}
+
+.error-message{
+    color: #ce1212;
+}
+
+.section-title {
+    font-size: 1.3em;
+    font-weight: bold;
 }
 
 /* ----------- HEADER ------------------- */
@@ -130,6 +144,10 @@ a {
 
 /* --------------  WISHLIST ITEM LIST PAGE  ----------------*/
 
+#item-info {
+    margin-top: 20px;
+}
+
 #new-item-form {
     display:none;
 }
@@ -151,6 +169,7 @@ a {
 
 #item-status-form {
     color: white;
+    margin: 5px;
 }
 
 .item-status-button {
@@ -165,24 +184,16 @@ a {
 /*}*/
 
 .selected{
-    background-color: #ffd11c;
+    background-color: #424242;
 }
-
-/*.unclaimed {*/
-/*    background-color: #70d10f;*/
-/*}*/
-
-/*.claimed {*/
-/*    background-color: #d1ad0f;*/
-/*}*/
-
-/*.purchased {*/
-/*    background-color: #d10f0f;*/
-/*}*/
 
 #claimed-by {
     color: #d8d8d8;
     font-size: .7em;
+}
+
+#comments-section {
+    margin-top: 15px;
 }
 
 .comment-author {
@@ -195,6 +206,10 @@ a {
     background-color: #e5e5e5;
     padding: 3px;
     border-radius: 3px;
+}
+
+#add-comment-btn {
+    display: block;
 }
 
 /* --------------  WISHLIST NEW PAGE  ----------------*/

@@ -1,10 +1,21 @@
 <% include ./partials/header %>
 
-    <div class='show-item title'>Item: <%= item.name %></div>
-    <div class='show-item price'><%= item.price %></div>
+<div id='item-info'></div>
+    <div class='section-title'><%= item.name %></div>
+    <div><%= item.price %></div>
+    <div class='show-item purchaseLink'><a href='<%= item.link %>'>Available here</a></div>
+    <div class='show-item notes'>Notes: <%= item.notes %></div>
     
     <form id='item-status-form' action="/user/<%= user._id %>/lists/<%= list._id %>/items/<%= item._id %>?_method=PUT" action="POST?">
         <input id='purchase-status-value' type="hidden" value="<%= item.purchaseStatus %>">
+        
+        <input id='claimed-by-data' type="hidden" value=
+            <% if(item.claimedBy === undefined){ %>
+                "undefined"
+            <% } else { %> 
+                "<%= item.claimedBy %>"
+            <% } %>
+        >
         <span class='item-status-button' id='unclaimed'>Unclaimed</span>
         <span class='item-status-button' id='claimed'>Claimed</span>
         <span class='item-status-button' id='purchased'>Purchased</span>
@@ -14,17 +25,12 @@
                     <%= item.purchaseStatus %> by <%= item.claimedBy.firstName %> <%= item.claimedBy.lastName %>
                 <% } %>
             </span>
+            <div class="error-message"></div>
     </form>
+</div>
     
-    <div class='show-item purchaseLink'><a href='<%= item.link %>'>Available here</a></div>
-    <div class='show-item notes'>Notes: <%= item.notes %></div>
-    <% if (currentUser && list.owner.equals(currentUser._id)){ %>
-        <form action='/user/<%= user._id %>/lists/<%= list._id %>/items/<%= item._id %>?_method=DELETE' method="POST">
-            <button class='btn btn-delete'>Delete item</button>
-        </form>
-    <% } %>
     <div id='comments-section'>
-        <h3>Comments</h3>
+        <div class='section-title'>Comments</div>
         <div id='comment-list'>
             <% item.comments.forEach(function(comment){ %>
                 <div class='show-item-comment'>

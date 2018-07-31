@@ -13,28 +13,35 @@ $(document).ready(function(){
 
 $('.item-status-button').on('click', function(e){
     e.preventDefault();
+    console.log('claimed-by-data: \n', $('#claimed-by-data').val());
     
-    $('.selected').toggleClass('selected');
-    $(this).toggleClass('selected');
     
-    let newStatus = $(this).html();
-    let actionUrl = $('#item-status-form').attr('action');
-    
-    $.ajax({
-        url: actionUrl,
-        data: {purchaseStatus: newStatus},
-        type: 'PUT',
-        success: function(data){
-            console.log('Item status updated!');
-            console.log(data)
-            if(data.claimedBy === undefined){
-                $('#claimed-by').html('');
-            } else {
-                console.log('hey');
-                $('#claimed-by').html(`${data.purchaseStatus} by ${data.claimedBy.firstName} ${data.claimedBy.lastName}`);
+    if($('#current-user').val() === $('#claimed-by-data').val() || $('#claimed-by-data').val() === 'undefined'){
+        $('.selected').toggleClass('selected');
+        $(this).toggleClass('selected');
+        
+        let newStatus = $(this).html();
+        let actionUrl = $('#item-status-form').attr('action');
+        
+        $.ajax({
+            url: actionUrl,
+            data: {purchaseStatus: newStatus},
+            type: 'PUT',
+            success: function(data){
+                console.log('Item status updated!');
+                console.log(data)
+                if(data.claimedBy === undefined){
+                    $('#claimed-by-data').val('undefined');
+                    $('#claimed-by').html(``);
+                } else {
+                    console.log('hey');
+                    $('#claimed-by').html(`${data.purchaseStatus} by ${data.claimedBy.firstName} ${data.claimedBy.lastName}`);
+                }
             }
-        }
-    })
+        })
+    } else {
+        $(".error-message").html("Someone else has claimed this item!");
+    }
 });
 
 // $('.item-status-button').on('mouseout', function(){
@@ -111,6 +118,11 @@ $('#new-item-form').submit(function(e){
         </div>
         <span>${item.price}</span>
         <span class="purchaseStatus ${item.purchaseStatus}">${item.purchaseStatus}</span>
+        
+        <form action="/user/${user_id}/lists/${list_id}/items/${item._id}?_method=DELETE" method="POST">
+            <button class='btn-delete'>Delete item</button>
+        </form>
+        
     </div>
 </a>
             `)

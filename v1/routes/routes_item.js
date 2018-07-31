@@ -30,7 +30,7 @@ router.post('/', isLoggedIn, function(req, res){
 });
 
 // ITEM - SHOW
-router.get('/:item_id', function(req, res){
+router.get('/:item_id', isLoggedIn, function(req, res){
 
     WishlistItem.findById(req.params.item_id).populate("comments").populate('claimedBy').exec(function(err, foundItem){
         if(err){
@@ -58,7 +58,7 @@ router.get('/:item_id', function(req, res){
 });
 
 // ITEM - UPDATE
-router.put('/:item_id/', function(req, res){
+router.put('/:item_id/', isLoggedIn, function(req, res){
     
     WishlistItem.findById(req.params.item_id).populate('claimedBy').exec(function(err, foundItem){
         if(err){

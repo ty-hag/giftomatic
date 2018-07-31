@@ -12,7 +12,14 @@
                     <%= item.name %>
                 </div>
                 <span><%= item.price %></span>
-                <span class="purchaseStatus <%= item.purchaseStatus %>"><%= item.purchaseStatus %></span>
+                <span>Status:<%= item.purchaseStatus %></span>
+            
+                <% if (currentUser && list.owner.equals(currentUser._id)){ %>
+                    <form action='/user/<%= user._id %>/lists/<%= list._id %>/items/<%= item._id %>?_method=DELETE' method="POST">
+                        <button class='btn-delete'>Delete item</button>
+                    </form>
+                <% } %>
+
             </div>
         </a>
     <% }); %>
@@ -29,31 +36,5 @@
     <textarea class='input-new' name="wishlistItem[notes]" placeholder="notes"></textarea>
     <button class="input-new btn">Add it!</button>  <span  class='btn' id='close-add-item'>Close</span>
 </form>
-
-<!--<div id="wishlist">-->
-<!--    <% list.items.forEach(function(item){ %>-->
-<!--        <a class="item-link" href="/items/<%= item._id %>">-->
-<!--            <div class="wishlist-item">-->
-<!--                <div class="wishlist-title">-->
-<!--                    <%= item.name %>-->
-<!--                </div>-->
-<!--                <span><%= item.price %></span>-->
-<!--                <span class="purchaseStatus <%= item.purchaseStatus %>"><%= item.purchaseStatus %></span>-->
-<!--            </div>-->
-<!--        </a>-->
-<!--    <% }); %>-->
-<!--</div>-->
-
-
-
-<!--<span class='btn' id='show-item-form'>Add new item</span>-->
-
-<!--<form id='new-item-form' action="/items" method="POST">-->
-<!--    <input type='text' class='input-new' name="wishlistItem[name]" placeholder="Name of item, description..."></input>-->
-<!--    <input type='text' class='input-new' name="wishlistItem[price]" placeholder="Price"></input>-->
-<!--    <input type='text' class='input-new' name="wishlistItem[link]" placeholder="Link"></input>-->
-<!--    <textarea class='input-new' name="wishlistItem[notes]" placeholder="notes"></textarea>-->
-<!--    <button class="input-new btn">Add it!</button>  <span  class='btn' id='cancel-add-item'>Cancel</span>-->
-<!--</form>-->
 
 <% include ./partials/footer.ejs %>
