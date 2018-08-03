@@ -1,20 +1,44 @@
 <html>
 <head>
     <link rel="stylesheet" href="/stylesheets/main.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Pattaya" rel="stylesheet">
 </head>  
 <body>
 <header>
     <!-- router prefix thingy is messing up the src path by adding "user" to it-->
     <!--<img class="gifto-icon" src="gifto_logo.svg" height="20px" width="20px">-->
+    <nav>
+        
+        <div id='nav-left'>
+            <i id='navbar-icon' class="fas fa-gift"></i> Gift-o-matic
+        </div>
+        
+        <div id ='nav-right'>
+        <% if(!currentUser){ %>
+            <li>
+                <a href='/register'><i class="fas fa-pen-alt"></i> Register</a>
+            </li>
+                
+            <li>
+                <a href='/login'><i class="fas fa-sign-in-alt"></i> Login</a>
+            </li>
+        </div>
+            
 
-    <% if(!currentUser){ %>
-        <a href='/register'>Register</a>
-        <a href='/login'>Login</a>
-    <% } else { %>
-        Hello, <%= currentUser.firstName %>
-        <a href='/user/<%= currentUser._id %>'>Home</a>
-        <a href='/logout'>Logout</a>
-    <% } %>
+        <% } else { %>
+            <li>
+                Hello, <%= currentUser.firstName %>
+            </li>
+            <li>
+                <a href='/user/<%= currentUser._id %>'><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li>
+                <a href='/logout'><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </li>
+        <% } %>
+    </nav>
+    
 
 
 </header>

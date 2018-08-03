@@ -96,8 +96,8 @@ $('#close-add-item').on('click', function(){
 $('#new-item-form').submit(function(e){
     e.preventDefault();
     
-    var user_id = $('#user_id').attr('class');
-    var list_id = $('#list_id').attr('class');
+    var user_id = $('#user_id').attr('data');
+    var list_id = $('#list_id').attr('data');
     
     var actionUrl = $(this).attr('action');
     var formData = $(this).serialize();
@@ -119,7 +119,7 @@ $('#new-item-form').submit(function(e){
         <span>${item.price}</span>
         <span class="purchaseStatus ${item.purchaseStatus}">${item.purchaseStatus}</span>
         
-        <form action="/user/${user_id}/lists/${list_id}/items/${item._id}?_method=DELETE" method="POST">
+        <form id="delete-button-form" action="/user/${user_id}/lists/${list_id}/items/${item._id}?_method=DELETE" method="POST">
             <button class='btn-delete'>Delete item</button>
         </form>
         

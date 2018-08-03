@@ -1,27 +1,36 @@
 <% include ./partials/header.ejs %>
 
 <h1><%= list.name %></h1>
-<div id='user_id' class='<%= user._id %>'></div>
-<div id='list_id' class='<%= list._id %>'></div>
+<div id='user_id' data='<%= user._id %>'></div>
+<div id='list_id' data='<%= list._id %>'></div>
 
 <div id="wishlist">
     <% list.items.forEach(function(item){ %>
-        <a class="item-link" href="/user/<%= user._id %>/lists/<%= list._id %>/items/<%= item._id %>">
+    
+        <% if (currentUser && list.owner.equals(currentUser._id)){ %>
             <div class="wishlist-item">
                 <div class="wishlist-title">
                     <%= item.name %>
                 </div>
                 <span><%= item.price %></span>
-                <span>Status:<%= item.purchaseStatus %></span>
-            
-                <% if (currentUser && list.owner.equals(currentUser._id)){ %>
-                    <form action='/user/<%= user._id %>/lists/<%= list._id %>/items/<%= item._id %>?_method=DELETE' method="POST">
-                        <button class='btn-delete'>Delete item</button>
-                    </form>
-                <% } %>
+                <form id="delete-button-form" action='/user/<%= user._id %>/lists/<%= list._id %>/items/<%= item._id %>?_method=DELETE' method="POST">
+                    <button class='btn-delete'>Delete item</button>
+                </form>
+
 
             </div>
-        </a>
+        <% } else { %>
+        
+            <a class="item-link" href="/user/<%= user._id %>/lists/<%= list._id %>/items/<%= item._id %>">
+                <div class="wishlist-item">
+                    <div class="wishlist-title">
+                        <%= item.name %>
+                    </div>
+                    <span><%= item.price %></span>
+                    <span>Status:<%= item.purchaseStatus %></span>
+                </div>
+            </a>
+        <% } %>
     <% }); %>
 </div>
 

@@ -8,13 +8,34 @@ light blue: #a3e0ff
 main gray: #cccccc
 light gray: #e2e2e2
 
+darkred: #c62323
+cream: #fffcf2
+skyblue: #afe4ff
+navy: #083851
+
+
+font-family: 'Pattaya', sans-serif;
+
 */
+:root {
+    /*--primary-color: #083851;*/
+    --primary-color: #07470d;
+    --secondary-color: #c62323;
+    --cream: #fffcf2;
+    --skylblue: #afe4ff;
+}
+
 
 
 /* --------------  GENERAL ----------------*/
+* {
+    margin: 0;
+    padding: 0;
+}
 
 body {
     font-family: Arial;
+    background-color: var(--cream);
 }
 
 a {
@@ -64,10 +85,11 @@ pre {
 /* ----------- HEADER ------------------- */
 
 header {
-    background-color: #ff7c1e;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--cream);
     padding: 10px;
-    border-radius: 3px;
+    font-family: 'Pattaya', sans-serif;
+    font-size: 1.2em;
 }
 
 a {
@@ -80,17 +102,39 @@ a {
     width: 5px;
 }
 
+nav {
+    display: flex;
+    justify-content: space-between;
+}
+
+nav li {
+    text-decoration: none;
+    color: inherit;
+    margin:0 10px;
+    list-style-type: none;
+    opacity: 1;
+}
+
+nav li:hover {
+    opacity: 0.8;
+}
+
+#nav-right {
+    display: flex;
+}
+
+#navbar-icon {
+    color: var(--secondary-color);
+}
+
 /*--------------- FOOTER ---------------------- */
 #footer-container {
     text-align: center;
-    margin-top: 50px;
 }
 
 #footer {
     font-size: 8pt;
-    color: white;
-    background-color: #f9f9f9;
-    padding: 5px;
+    color: var(--primary-color);
     display: inline;
     border-radius: 3px;
 }
@@ -99,16 +143,19 @@ a {
 
 #landing-container {
     text-align: center;
+    margin-top: 20vh;
 }
 
 #landing-title{
-    font-size: 50pt;
+    font-family: 'Pattaya', sans-serif;
+    font-size: 5em;
     text-align: center;
+    color: var(--primary-color);
 }
 
-#giftomatic-logo {
-    height: 100px;
-    width: 100px;
+#landing-icon {
+    font-size: 5em;
+    color: var(--secondary-color);
 }
 
 /*#skull-landing{*/
@@ -140,6 +187,10 @@ a {
 }
 .wishlist:hover {
     background-color: #e5e5e5;
+}
+
+#delete-button-form {
+    margin-bottom: 0em;
 }
 
 /* --------------  WISHLIST ITEM LIST PAGE  ----------------*/

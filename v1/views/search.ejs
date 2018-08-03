@@ -2,7 +2,9 @@
 
 <% searchResults.forEach(function(user){ %>
     <div class='user-search-result'>
-        <div class='user-result name'><%= user.firstName %> <%= user.lastName %></div>
+        <a href="/user/<%= user._id %>/lists/">
+            <div class='user-result name'><%= user.firstName %> <%= user.lastName %></div>
+        </a>
     </div>
 <% }) %>
 
