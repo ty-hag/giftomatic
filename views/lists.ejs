@@ -1,6 +1,10 @@
 <% include ./partials/header %>
 
 <div id="wishlists">
+
+    <% if(user.myLists.length === 0){ %>
+        No lists found.
+    <% } %>
     <% user.myLists.forEach(function(list){ %> <!-- this might be broken, change to list.forEach and check routes? -->
         <a href="/user/<%= user._id %>/lists/<%= list._id %>">
             <div class="wishlist">

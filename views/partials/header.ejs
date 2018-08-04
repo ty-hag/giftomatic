@@ -11,7 +11,11 @@
     <nav>
         
         <div id='nav-left'>
-            <i id='navbar-icon' class="fas fa-gift"></i> Gift-o-matic
+            <li class="navbar-button">
+                <a href="/">
+                    <i id='navbar-icon' class="fas fa-gift"></i> Gift-o-matic
+                </a>
+            </li>
         </div>
         
         <div id ='nav-right'>
@@ -30,10 +34,10 @@
             <li>
                 Hello, <%= currentUser.firstName %>
             </li>
-            <li>
+            <li class="navbar-button">
                 <a href='/user/<%= currentUser._id %>'><i class="fas fa-home"></i> Home</a>
             </li>
-            <li>
+            <li class="navbar-button">
                 <a href='/logout'><i class="fas fa-sign-out-alt"></i> Logout</a>
             </li>
         <% } %>

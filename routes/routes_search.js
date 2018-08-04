@@ -12,7 +12,6 @@ router.get('/', function(req, res){
         if(err){
             console.log(err);
         } else {
-            console.log(searchResults)
             res.render('search', {searchResults: searchResults});
         }
     })
