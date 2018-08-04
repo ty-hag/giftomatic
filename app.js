@@ -17,13 +17,15 @@ var express = require('express'),
     itemRoutes = require('./routes/routes_item'),
     searchRoutes = require('./routes/routes_search'),
     commentRoutes = require('./routes/routes_comment'),
+    expressSanitizer = require('express-sanitizer'),
     seedDB = require('./seed_callbacks');
 
 mongoose.connect("mongodb://localhost/giftOMatic");
-seedDB();
+//seedDB();
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(expressSanitizer());
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
 

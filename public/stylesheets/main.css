@@ -22,7 +22,7 @@ font-family: 'Pattaya', sans-serif;
     --primary-color: #07470d;
     --secondary-color: #c62323;
     --cream: #fffcf2;
-    --skylblue: #afe4ff;
+    --primary-light: #3e8746;
 }
 
 
@@ -44,21 +44,22 @@ a {
 }
 
 .btn {
-    background-color: #007bd1;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--cream);
     border: none;
     padding: 3px;
     border-radius: 3px;
     display: inline;
+    cursor: pointer;
 }
 
 .btn:hover{
-    background-color: #0096ff;
+    background-color: var(--primary-light);
 }
 
 .btn-delete {
     background-color: #b74b40;
-    color: white;
+    color: var(--cream);
     border: none;
     padding: 3px;
     border-radius: 3px;
@@ -115,7 +116,7 @@ nav li {
     opacity: 1;
 }
 
-nav li:hover {
+.navbar-button:hover {
     opacity: 0.8;
 }
 
@@ -158,35 +159,16 @@ nav li:hover {
     color: var(--secondary-color);
 }
 
-/*#skull-landing{*/
-/*    margin: 0 auto;*/
-/*    animation-name: skullSpin;*/
-/*    animation-duration: 3s;*/
-/*    animation-timing-function: linear;*/
-/*    animation-iteration-count: infinite;*/
-/*}*/
-
-/*@keyframes skullSpin{*/
-/*    0%{*/
-/*        transform: rotate(0deg) scale(1);*/
-/*    }*/
-/*    50%{*/
-/*        transform: rotate(180deg) scale(1.3);*/
-/*    }*/
-/*    100%{*/
-/*        transform: rotate(360deg) scale(1);*/
-/*    }*/
-/*}*/
-
 /* --------------  WISHLIST LIST PAGE  ----------------*/
 
 .wishlist {
-    background-color: #eaeaea;
+    background-color: var(--primary-color);
+    color: var(--cream);
     border-radius: 3px;
     margin: 3px;
 }
 .wishlist:hover {
-    background-color: #e5e5e5;
+    background-color: var(--primary-light);
 }
 
 #delete-button-form {
@@ -235,11 +217,11 @@ nav li:hover {
 /*}*/
 
 .selected{
-    background-color: #424242;
+    background-color: var(--primary-color);
 }
 
 #claimed-by {
-    color: #d8d8d8;
+    color: var(--primary-light);
     font-size: .7em;
 }
 
@@ -249,7 +231,7 @@ nav li:hover {
 
 .comment-author {
     font-size: 0.8em;
-    color: #878787;
+    color: var(--primary-light);
 }
 
 .show-item-comment {

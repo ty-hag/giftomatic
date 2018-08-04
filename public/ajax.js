@@ -44,20 +44,18 @@ $('.item-status-button').on('click', function(e){
     }
 });
 
-// $('.item-status-button').on('mouseout', function(){
-//     $(this).on('hover', function(){
-//         $(this).css('background-color', '#c8c8c8');
-//     });
-// });
 
+// add comment
 $('#add-comment-form').submit(function(e){
     e.preventDefault();
     
-    console.log("Comment form submitted!");
+    if($('textarea').val() === ''){
+        return;
+    }
     
     var actionUrl = $(this).attr('action');
     var formData = $(this).serialize();
-    console.log(formData);
+    console.log('formData: \n', formData);
     
     $.ajax({
         url: actionUrl,
@@ -76,7 +74,7 @@ $('#add-comment-form').submit(function(e){
                 </div>
                 `)
             $('#add-comment-form textarea').val('');
-        }    
+        }
     });
 });
 
@@ -111,20 +109,19 @@ $('#new-item-form').submit(function(e){
         success: function(item){ 
             $('#wishlist').append(
                 `
-<a class="item-link" href="/user/${user_id}/lists/${list_id}/items/${item._id}">
-    <div class="wishlist-item">
-        <div class="wishlist-title">
-            ${item.name}
-        </div>
-        <span>${item.price}</span>
-        <span class="purchaseStatus ${item.purchaseStatus}">${item.purchaseStatus}</span>
-        
-        <form id="delete-button-form" action="/user/${user_id}/lists/${list_id}/items/${item._id}?_method=DELETE" method="POST">
-            <button class='btn-delete'>Delete item</button>
-        </form>
-        
+
+<div class="wishlist-item">
+    <div class="wishlist-title">
+        ${item.name}
     </div>
-</a>
+    <span>${item.price}</span>
+    <span class="purchaseStatus ${item.purchaseStatus}">${item.purchaseStatus}</span>
+    
+    <form id="delete-button-form" action="/user/${user_id}/lists/${list_id}/items/${item._id}?_method=DELETE" method="POST">
+        <button class='btn-delete'>Delete item</button>
+    </form>
+    
+</div>
             `)
            //$('#new-item-form').toggle();
             $('#new-item-form input').val('');

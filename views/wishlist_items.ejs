@@ -34,16 +34,15 @@
     <% }); %>
 </div>
 
-
-
-<span class='btn' id='show-item-form'>Add new item</span>
-
-<form id='new-item-form' action="/user/<%= user._id %>/lists/<%= list._id %>/items" method="POST">
-    <input type='text' class='input-new' name="wishlistItem[name]" placeholder="Name of item, description..."></input>
-    <input type='text' class='input-new' name="wishlistItem[price]" placeholder="Price"></input>
-    <input type='text' class='input-new' name="wishlistItem[link]" placeholder="Link"></input>
-    <textarea class='input-new' name="wishlistItem[notes]" placeholder="notes"></textarea>
-    <button class="input-new btn">Add it!</button>  <span  class='btn' id='close-add-item'>Close</span>
-</form>
+<% if(currentUser && list.owner.equals(currentUser._id)){ %>
+    <span class='btn' id='show-item-form'>Add new item</span>
+    <form id='new-item-form' action="/user/<%= user._id %>/lists/<%= list._id %>/items" method="POST">
+        <input type='text' class='input-new' name="wishlistItem[name]" placeholder="Name of item, description..."></input>
+        <input type='text' class='input-new' name="wishlistItem[price]" placeholder="Price"></input>
+        <input type='text' class='input-new' name="wishlistItem[link]" placeholder="Link"></input>
+        <textarea class='input-new' name="wishlistItem[notes]" placeholder="notes"></textarea>
+        <button class="input-new btn">Add it!</button>  <span  class='btn' id='close-add-item'>Close</span>
+    </form>
+<% } %>
 
 <% include ./partials/footer.ejs %>
