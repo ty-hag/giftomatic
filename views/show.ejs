@@ -1,7 +1,7 @@
 <% include ./partials/header %>
 
 <div id='item-info'></div>
-    <div class='section-title'><%= item.name %></div>
+    <div class='section-title'><%= item.name %><span class="small-text"> for <%= user.firstName %></span></div>
     <div><%= item.price %></div>
     <div class='show-item purchaseLink'><a href='<%= item.link %>'>Available here</a></div>
     <div class='show-item notes'>Notes: <%= item.notes %></div>
