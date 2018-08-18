@@ -18,11 +18,12 @@ font-family: 'Pattaya', sans-serif;
 
 */
 :root {
-    /*--primary-color: #083851;*/
-    --primary-color: #07470d;
+    --primary-color: #083851;
+    /* --primary-color: #07470d; */
     --secondary-color: #c62323;
     --cream: #fffcf2;
-    --primary-light: #3e8746;
+    --primary-light: #175475;
+    /* --primary-light: #3e8746; */
 }
 
 
@@ -34,7 +35,8 @@ font-family: 'Pattaya', sans-serif;
 }
 
 body {
-    font-family: Arial;
+    font-family: Georgia, serif;
+    color: var(--primary-color);
     background-color: var(--cream);
 }
 
@@ -67,7 +69,7 @@ a {
 }
 
 pre {
-    font-family: Arial;
+    font-family: Georgia, serif;
     padding: inherit;
     margin: inherit;
     line-height: inherit;
@@ -81,6 +83,11 @@ pre {
 .section-title {
     font-size: 1.3em;
     font-weight: bold;
+}
+
+.small-text {
+    font-size: 0.75em;
+    font-weight: normal;
 }
 
 /* ----------- HEADER ------------------- */
