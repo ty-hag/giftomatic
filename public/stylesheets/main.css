@@ -24,6 +24,7 @@ font-family: 'Pattaya', sans-serif;
     --cream: #fffcf2;
     --primary-light: #175475;
     /* --primary-light: #3e8746; */
+    --main-font: Georgia;
 }
 
 
@@ -35,9 +36,19 @@ font-family: 'Pattaya', sans-serif;
 }
 
 body {
-    font-family: Georgia, serif;
+    font-family: var(--main-font);
     color: var(--primary-color);
     background-color: var(--cream);
+}
+
+.container-main {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.center-in-page {
+    text-align: center;
 }
 
 a {
@@ -47,6 +58,7 @@ a {
 
 .btn {
     background-color: var(--primary-color);
+    font-family: var(--main-font);
     color: var(--cream);
     border: none;
     padding: 3px;
@@ -69,7 +81,7 @@ a {
 }
 
 pre {
-    font-family: Georgia, serif;
+    font-family: var(--main-font);
     padding: inherit;
     margin: inherit;
     line-height: inherit;
@@ -234,6 +246,8 @@ nav li {
 
 #comments-section {
     margin-top: 15px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .comment-author {
