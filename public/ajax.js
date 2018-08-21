@@ -15,6 +15,7 @@ $(document).ready(function(){
 $('.item-status-button').on('click', function(e){
     e.preventDefault();
 
+    // Check if item unclaimed or user is person who claimed item
     if($('#current-user').val() === $('#claimed-by-data').val() || $('#claimed-by-data').val() === 'undefined'){
         let clickedButton = $(this);
         let newStatus = $(this).html();
@@ -45,6 +46,7 @@ $('.item-status-button').on('click', function(e){
             }
         })
     } else {
+        // Handle person 
         $(".error-message").html("Someone else has claimed this item!");
     }
 });
