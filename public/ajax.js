@@ -11,31 +11,36 @@ $(document).ready(function(){
     }
 })
 
+// update purchase status on click
 $('.item-status-button').on('click', function(e){
     e.preventDefault();
-    console.log('claimed-by-data: \n', $('#claimed-by-data').val());
-    
-    
+
     if($('#current-user').val() === $('#claimed-by-data').val() || $('#claimed-by-data').val() === 'undefined'){
-        $('.selected').toggleClass('selected');
-        $(this).toggleClass('selected');
-        
+        let clickedButton = $(this);
         let newStatus = $(this).html();
         let actionUrl = $('#item-status-form').attr('action');
-        
+
         $.ajax({
             url: actionUrl,
             data: {purchaseStatus: newStatus},
             type: 'PUT',
             success: function(data){
-                console.log('Item status updated!');
-                console.log(data)
-                if(data.claimedBy === undefined){
-                    $('#claimed-by-data').val('undefined');
-                    $('#claimed-by').html(``);
+                console.log(data);
+                if(data.cantClaim === true){
+                    // Handle DOM update - someone claimed while user was viewing item
+                    $(".error-message").html("Someone else has just claimed this item. Refresh your page to see the update.");
                 } else {
-                    console.log('hey');
-                    $('#claimed-by').html(`${data.purchaseStatus} by ${data.claimedBy.firstName} ${data.claimedBy.lastName}`);
+                    if(data.claimedBy === undefined){
+                        // Update DOM for user relinquishing claim
+                        $('#claimed-by-data').val('undefined');
+                        $('#claimed-by').html(``);
+                    } else {
+                        // Update DOM for new claim/purchase
+                        $('#claimed-by').html(`${data.purchaseStatus} by ${data.claimedBy.firstName} ${data.claimedBy.lastName}`);
+                    }
+                    // Update button highlight
+                    $('.selected').toggleClass('selected');
+                    clickedButton.toggleClass('selected');
                 }
             }
         })
