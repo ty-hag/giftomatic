@@ -61,26 +61,48 @@ router.get('/:item_id', isLoggedIn, function(req, res){
 router.put('/:item_id/', isLoggedIn, function(req, res){
     
     WishlistItem.findById(req.params.item_id).populate('claimedBy').exec(function(err, foundItem){
+        // if(err){
+        //     console.log(err);
+        //     res.redirect('back');
+        // } else {
+        //     console.log('req.user: \n', req.user);
+        //     console.log('foundItem.purchaseStatus: \n', foundItem.purchaseStatus);
+        //     // Handle user claiming item
+        //     if(foundItem.purchaseStatus === 'Unclaimed'){
+        //         foundItem.claimedBy = req.user;
+        //         foundItem.save();
+        //     // Handle user reqlinquishing claim to item
+        //     } else if(req.body.purchaseStatus === 'Unclaimed'){
+        //         foundItem.claimedBy = undefined;
+        //         foundItem.save();
+        //     }
+        //     // Update item's purchaseStatus
+        //     foundItem.purchaseStatus = req.body.purchaseStatus;
+        //     foundItem.save();
+        //     console.log("Currently claimed by: ", foundItem.claimedBy);
+        //     res.json(foundItem);
+        // }
         if(err){
             console.log(err);
             res.redirect('back');
         } else {
-            console.log('req.user: \n', req.user);
-            console.log('foundItem.purchaseStatus: \n', foundItem.purchaseStatus);
-            // Handle user claiming item
-            if(foundItem.purchaseStatus === 'Unclaimed'){
-                foundItem.claimedBy = req.user;
+            // Check if item is unclaimed in database or if claimed by user
+            if(foundItem.purchaseStatus === 'Unclaimed' || foundItem.claimedBy._id.equals(req.user._id)){
+                // Handle user claiming item
+                if(foundItem.purchaseStatus === 'Unclaimed'){
+                    foundItem.claimedBy = req.user;
+                // Handle user relinquishing claim to item
+                } else if(req.body.purchaseStatus === 'Unclaimed'){
+                    foundItem.claimedBy = undefined;
+                }
+                // Update item's purchaseStatus
+                foundItem.purchaseStatus = req.body.purchaseStatus;
                 foundItem.save();
-            // Handle user reqlinquishing claim to item
-            } else if(req.body.purchaseStatus === 'Unclaimed'){
-                foundItem.claimedBy = undefined;
-                foundItem.save();
+                console.log("Currently claimed by: ", foundItem.claimedBy);
+                res.json(foundItem);
+            } else {
+                res.json({cantClaim: true});
             }
-            // Update item's purchaseStatus
-            foundItem.purchaseStatus = req.body.purchaseStatus;
-            foundItem.save();
-            console.log("Currently claimed by: ", foundItem.claimedBy);
-            res.json(foundItem);
         }
     })
 });

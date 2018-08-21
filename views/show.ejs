@@ -9,6 +9,10 @@
     <form id='item-status-form' action="/user/<%= user._id %>/lists/<%= list._id %>/items/<%= item._id %>?_method=PUT" action="POST?">
         <input id='purchase-status-value' type="hidden" value="<%= item.purchaseStatus %>">
         
+        <!--
+            AJAX file checks the value of this id to determine whether or not the item
+            is claimed. 
+        -->
         <input id='claimed-by-data' type="hidden" value=
             <% if(item.claimedBy === undefined){ %>
                 "undefined"
