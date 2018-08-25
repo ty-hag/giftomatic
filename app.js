@@ -20,7 +20,7 @@ var express = require('express'),
     expressSanitizer = require('express-sanitizer'),
     seedDB = require('./seed_callbacks');
 
-mongoose.connect("mongodb://localhost/giftOMatic");
+mongoose.connect("mongodb://localhost:27017/giftOMatic", {useNewUrlParser: true});
 //seedDB();
 
 app.set('view engine', 'ejs');
