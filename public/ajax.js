@@ -136,3 +136,24 @@ $('#new-item-form').submit(function(e){
         }
     })
 })
+
+//-------------- LIST PAGE -------------------
+//
+$(".send-friend-invite").on('click', function(){
+    let $clicked = $(this);
+    let $clickedParent = $clicked.parent();
+    let routeUrl = $clicked.attr("data-route");
+    $.ajax({
+        url: routeUrl,
+        type: 'GET',
+        success: function(item){
+            if(item.rejected){
+                console.log('REJECTED!');
+            } else {
+                console.log(item);
+                $clicked.remove();
+                $clickedParent.append(' - Invitation sent!');
+            }
+        }
+    })
+})

@@ -1,10 +1,13 @@
 <% include ./partials/header %>
 
+Here are all the users, sorted in the most alphabetical of ways.
+
 <% searchResults.forEach(function(user){ %>
     <div class='user-search-result'>
-        <a href="/user/<%= user._id %>/lists/">
-            <div class='user-result name'><%= user.firstName %> <%= user.lastName %></div>
-        </a>
+        <div class='user-result name'>
+            <%= user.firstName %> <%= user.lastName %>
+            <span data-route="/invitation/<%= user._id %>" class="btn send-friend-invite">Send friend invite</span>
+        </div>
     </div>
 <% }) %>
 

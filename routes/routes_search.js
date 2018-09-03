@@ -3,15 +3,33 @@ var User = require('../models/user');
 
 var router = express.Router({mergeParams:true});
 
-// router.get('/', function(req, res){
-//     res.render('search');
-// })
-
-router.get('/', function(req, res){
+router.get('/', isLoggedIn, function(req, res){
     User.find({}, function(err, searchResults){
         if(err){
             console.log(err);
         } else {
+            console.log("req.user \n", req.user);
+            // Remove users who have been sent an invite and current user's own entry
+            // Problem - user who has no friend invites out does not have own name removed
+            //         - need to handle own name removal separately
+            searchResults.forEach(result =>{
+                if(result._id.equals(req.user._id)){
+                    searchResults.splice(searchResults.indexOf(result), 1);
+                }
+            })
+
+            if(req.user.friends.length > 0 && searchResults.length > 0){
+                req.user.friends.forEach(friend => {
+                    searchResults.forEach(result =>{
+                        console.log("friend id:", friend._id);
+                        console.log("search result user id:",req.user._id);
+                        if(friend._id.equals(result._id)){ // Not sure that friend.friendObject works
+                            searchResults.splice(searchResults.indexOf(result), 1);
+                        }
+                    })
+                })
+            }
+            // Put results in alphebetical order by last name
             searchResults.sort(function(a, b){
                 if(a.lastName.toLowerCase() > b.lastName.toLowerCase()){
                     return 1;
@@ -21,10 +39,16 @@ router.get('/', function(req, res){
                     return 0;
                 }
             })
-            console.log(searchResults);
             res.render('search', {searchResults: searchResults});
         }
     })
 })
+
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect('/login');
+}
 
 module.exports = router;
