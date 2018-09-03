@@ -62,29 +62,33 @@ var listData =[
 // ];
 
 function seedDB(){
-    User.remove({},function(err){
-        if(err){
-            console.log(err);
-        } else {
-            console.log("Removed users.")
-            // User.create(userData, function(err){
-            //     if(err){
-            //         console.log(err);
-            //     } else {
-            //         console.log("Added user seed data.");
-            //     }
-            // })
-        }
-    })
+    // User.remove({},function(err){
+    //     if(err){
+    //         console.log(err);
+    //     } else {
+    //         console.log("Removed users.")
+    //         // User.create(userData, function(err){
+    //         //     if(err){
+    //         //         console.log(err);
+    //         //     } else {
+    //         //         console.log("Added user seed data.");
+    //         //     }
+    //         // })
+    //     }
+    // })
     
-    User.find({}, function(err, users){
+    // Remove lists and friends from each user
+    User.find({}).populate("friends").exec(function(err, users){
         if(err){
             console.log(err);
         } else {
             users.forEach(function(user){
                 user.myLists = [];
+                // Remove friends and invites
+                user.friends = [];
+                user.invitations = [];
                 user.save();
-                console.log("user.myLists after removal: \n", user.myLists);
+                console.log("user after list and friend removal: \n", user);
             })
         }
     })
@@ -107,23 +111,6 @@ function seedDB(){
                             console.log(err);
                         } else {
                             console.log("seedDB func has removed comments.");
-                            // add item seed data
-                            WishlistItem.create(itemData, function(err, items){
-                                if(err){
-                                    console.log(err);
-                                } else {
-                                    Wishlist.create(listData, function(err, lists){
-                                        if(err){
-                                            console.log(err);
-                                        } else {
-                                            items.forEach(function(item){
-                                                lists[0].items.push(item);
-                                            });
-                                            lists[0].save();
-                                        }
-                                    })
-                                }
-                            });
                         }
                     });
                 }

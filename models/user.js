@@ -17,6 +17,21 @@ var UserSchema = new mongoose.Schema(
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "WishlistItem"
             }
+        ],
+        friends: [
+            {
+                friendStatus: {type: String, default: "pending"},
+                friendObject: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "User"
+                }
+            }
+        ],
+        invitations: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User"
+            }
         ]
     }
 )
