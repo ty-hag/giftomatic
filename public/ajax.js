@@ -164,7 +164,7 @@ $(".send-friend-invite").on('click', function(){
 
 // Handle accept button press
 $("#invite-accept").on('click', function(){
-    let answerData = JSON.stringify({answer: 'accept'});
+    let answerData = {answer: "accept"};
     console.log('answerData:\n', answerData);
     let $clickedInvitation = $(this).parent();
 
@@ -187,7 +187,7 @@ $("#invite-accept").on('click', function(){
 
 // Handle reject button press (mostly the same as accept, may want to refactor later)
 $("#invite-delete").on('click', function(){
-    let answerData = JSON.stringify({answer: 'reject'});
+    let answerData = {answer: 'reject'};
     console.log('answerData:\n', answerData);
     let $clickedInvitation = $(this).parent();
 

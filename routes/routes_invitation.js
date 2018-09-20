@@ -30,8 +30,6 @@ router.get('/sendInvite/:id', isLoggedIn, function(req, res){
                     let invitedByInvitee = foundInvitee.friends.some(function(friend){
                         return friend._id.equals(foundCurrentUser._id);
                     });
-                    console.log("invitationExists/invitedByInvitee");
-                    console.log(`${invitationExists}/${invitedByInvitee}`);
                     if(invitationExists || invitedByInvitee){
                         res.json({rejected: true});
                         console.log("Invite failed.");
@@ -79,9 +77,9 @@ router.get('/:id', isLoggedIn, function(req, res){
 // Handle accept/reject of invitation
 router.post('/:id/answer/:inviter_id', isLoggedIn, function(req, res){
     console.log("accept/reject route hit");
+    console.log('req.body:\n', req.body);
+    console.log(req.body.answer);
 
-    // Handle accepting of invitation
-    if(req.body.answer === "accept"){
         User.findById(req.params.id)
         .populate("invitations")
         .populate("friends")
@@ -91,40 +89,68 @@ router.post('/:id/answer/:inviter_id', isLoggedIn, function(req, res){
             .populate("invitations")
             .populate("friends")
             .exec(function(err, foundInviter){
-                
-                console.log("foundUser before friend add:\n", foundUser);
-                // Add inviter to current user's list of friends
-                foundUser.friends.push(foundInviter);
-                foundUser.friends[foundUser.friends.length - 1].friendStatus = "friends";
-                // Remove invitation
-                foundUser.invitations.forEach(function(invitation){
-                    if(invitation._id.equals(req.params.inviter_id)){
-                        let index = foundUser.invitations.indexOf(invitation);
-                        if(index > -1){
-                            foundUser.invitations.splice(index, 1);
-                        }
-                    }
-                })
-                console.log("foundUser after:\n", foundUser);
-                foundUser.save();
-                
-                // find current user among inviter's friend list, change status to friends
-                if(foundInviter.friends.length > 0){
-                    foundInviter.friends.forEach(function(friend){
-                        if(friend._id.equals(req.params.id)){
-                            friend.friendStatus = 'friends';
+
+                // Handle accepted invitation
+                if(req.body.answer === "accept"){
+                    
+                    // Add inviter to current user's list of friends
+                    foundUser.friends.push(foundInviter);
+                    foundUser.friends[foundUser.friends.length - 1].friendStatus = "friends";
+                    // Remove invitation
+                    foundUser.invitations.forEach(function(invitation){
+                        if(invitation._id.equals(req.params.inviter_id)){
+                            let index = foundUser.invitations.indexOf(invitation);
+                            if(index > -1){
+                                foundUser.invitations.splice(index, 1);
+                            }
                         }
                     })
-                }
-                foundInviter.save();
-            })
-        })
+                    foundUser.save();
+                    
+                    // find current user among inviter's friend list, change status to friends
+                    if(foundInviter.friends.length > 0){
+                        foundInviter.friends.forEach(function(friend){
+                            if(friend._id.equals(req.params.id)){
+                                friend.friendStatus = 'friends';
+                            }
+                        })
+                    }
+                    foundInviter.save();
+                    console.log("foundUser after:\n", foundUser);
+                    console.log("foundInviter after:\n", foundInviter);
+                
+                // Handle rejected invitation
+                } else if (req.body.answer === "reject"){
+                    console.log("rejected invite");
+                    
+                    // Remove invitation from cUser's list of invitations
+                    foundUser.invitations.forEach(function(invitation){
+                        if(invitation._id.equals(req.params.inviter_id)){
+                            let index = foundUser.invitations.indexOf(invitation);
+                            if(index > -1){
+                                foundUser.invitations.splice(index, 1);
+                            }
+                        }
+                    })
+                    foundUser.save();
 
-    // Handle invitation rejection
-    } else if (req.body.answer === "reject"){
-        console.log("rejected invite");
-    }
-    res.json({sendAnswer: req.body.answer});
+                    // Remove "pending" friend from inviter's list of friends
+                    if(foundInviter.friends.length > 0){
+                        foundInviter.friends.forEach(function(friend){
+                            if(friend._id.equals(foundUser._id)){
+                                let index = foundInviter.friends.indexOf(friend);
+                                foundInviter.friends.splice(index, 1);
+                            }
+                        });
+                    }
+                    foundInviter.save();
+                    console.log("foundUser after:\n", foundUser);
+                    console.log("foundInviter after:\n", foundInviter);
+                }
+            });
+        })
+        
+    res.json({sendAnswer: req.body.answer})
 });
 
 function isLoggedIn(req, res, next){
