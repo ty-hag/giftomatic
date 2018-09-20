@@ -1,14 +1,12 @@
 <% include ./partials/header %>
 
-Here are all the users, sorted in the most alphabetical of ways.
+Here are all the users you are not yet friends with, sorted by last name.
 
 <% searchResults.forEach(function(user){ %>
-    <div class='user-search-result'>
-        <div class='user-result name'>
-            <%= user.firstName %> <%= user.lastName %>
-            <span data-route="/invitation/<%= user._id %>" class="btn send-friend-invite">Send friend invite</span>
-        </div>
-    </div>
+    <li class='user-search-result'>
+        <span class='user-result-name'><%= user.firstName %> <%= user.lastName %></span>
+        <span data-route="/invitations/sendInvite/<%= user._id %>" class="btn send-friend-invite">Send friend invite</span>
+    </li>
 <% }) %>
 
 <% include ./partials/footer %>

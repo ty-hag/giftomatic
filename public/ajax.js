@@ -137,7 +137,7 @@ $('#new-item-form').submit(function(e){
     })
 })
 
-//-------------- LIST PAGE -------------------
+//-------------- SEARCH PAGE -------------------
 //
 $(".send-friend-invite").on('click', function(){
     let $clicked = $(this);
@@ -149,6 +149,8 @@ $(".send-friend-invite").on('click', function(){
         success: function(item){
             if(item.rejected){
                 console.log('REJECTED!');
+                $clicked.remove();
+                $clickedParent.append(' - Invitation failed. This user may have already sent you an invite.');
             } else {
                 console.log(item);
                 $clicked.remove();
@@ -156,4 +158,52 @@ $(".send-friend-invite").on('click', function(){
             }
         }
     })
+})
+
+//-------------- INVITATION PAGE -------------------
+
+// Handle accept button press
+$("#invite-accept").on('click', function(){
+    let answerData = JSON.stringify({answer: 'accept'});
+    console.log('answerData:\n', answerData);
+    let $clickedInvitation = $(this).parent();
+
+    // put together route for request
+    let routeUrl = $(this).parent().attr('data-answer-url');
+    console.log("routeUrl\n", routeUrl);
+    $.ajax(
+        {
+            url: routeUrl,
+            data: answerData,
+            type: 'POST',
+            dataType: 'json',
+            success: function(receivedData){
+                console.log(receivedData);
+                $clickedInvitation.html("Invitation accepted!");
+            }
+        }
+    )
+})
+
+// Handle reject button press (mostly the same as accept, may want to refactor later)
+$("#invite-delete").on('click', function(){
+    let answerData = JSON.stringify({answer: 'reject'});
+    console.log('answerData:\n', answerData);
+    let $clickedInvitation = $(this).parent();
+
+    // put together route for request
+    let routeUrl = $(this).parent().attr('data-answer-url');
+    console.log("routeUrl\n", routeUrl);
+    $.ajax(
+        {
+            url: routeUrl,
+            data: answerData,
+            type: 'POST',
+            dataType: 'json',
+            success: function(receivedData){
+                console.log(receivedData);
+                $clickedInvitation.html("Invitation rejected!");
+            }
+        }
+    )
 })

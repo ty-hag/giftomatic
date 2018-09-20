@@ -25,6 +25,8 @@ font-family: 'Pattaya', sans-serif;
     --primary-light: #175475;
     /* --primary-light: #3e8746; */
     --main-font: Georgia;
+    --approve-color: #0e5007;
+    --reject-color: #db0d0d;
 }
 
 
@@ -72,12 +74,23 @@ a {
 }
 
 .btn-delete {
-    background-color: #b74b40;
+    background-color: var(--reject-color);
     color: var(--cream);
     border: none;
     padding: 3px;
     border-radius: 3px;
     display: inline;
+    cursor: pointer;
+}
+
+.btn-approve {
+    background-color: var(--approve-color);
+    color: var(--cream);
+    border: none;
+    padding: 3px;
+    border-radius: 3px;
+    display: inline;
+    cursor: pointer;
 }
 
 pre {
@@ -178,6 +191,21 @@ nav li {
     color: var(--secondary-color);
 }
 
+/* --------------  USER HOME PAGE  ----------------*/
+
+#user-page-option-container{
+    display:flex;
+}
+
+.user-page-option{
+    width: 300px;
+    background-color: var(--primary-color);
+    color: var(--cream);
+    margin: 5px;
+    text-align: center;
+    display:block;
+}
+
 /* --------------  WISHLIST LIST PAGE  ----------------*/
 
 .wishlist {
@@ -273,3 +301,18 @@ nav li {
 }
 
 /* --------------  ITEM PAGE  ----------------*/
+
+/* --------------  SEARCH PAGE  ----------------*/
+.user-search-result{
+    margin-top: 5px;
+}
+
+.user-result-name {
+    font-size: 1.2em;
+}
+
+/* --------------  INVITATION PAGE  ----------------*/
+
+.invitation {
+    margin-top: 5px;
+}

@@ -88,7 +88,6 @@ function seedDB(){
                 user.friends = [];
                 user.invitations = [];
                 user.save();
-                console.log("user after list and friend removal: \n", user);
             })
         }
     })
