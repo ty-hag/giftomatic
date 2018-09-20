@@ -22,7 +22,7 @@ var express = require('express'),
     seedDB = require('./seed_callbacks');
 
 mongoose.connect("mongodb://localhost:27017/giftOMatic", {useNewUrlParser: true});
-//seedDB();
+seedDB();
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended:true}));
@@ -54,7 +54,7 @@ app.use('/user/:user_id/lists', listRoutes);
 app.use('/user/:user_id/lists/:list_id/items', itemRoutes);
 app.use('/user/:user_id/lists/:list_id/items/:id/comments', commentRoutes);
 app.use('/search', searchRoutes);
-app.use('/invitation', invitationRoutes);
+app.use('/invitations', invitationRoutes);
 
 ///============== ROUTES ========================
 

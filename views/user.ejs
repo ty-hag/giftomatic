@@ -2,9 +2,12 @@
 
 <h1><%= user.firstName %> <%= user.lastName %></h1>
 
-<div><a href="/user/<%= user._id %>/lists/">My lists</a></div>
-<div><a href="/user/<%= user._id %>/lists/new">Add a list</a></div>
-<div><a href="/search">See other users</a></div>
-<div>Updates</div>
+<div id="user-page-option-container">
+    <a href="/user/<%= user._id %>/lists/" class="user-page-option">My lists</a>
+    <a href="/user/<%= user._id %>/lists/new" class="user-page-option">Add a list</a>
+    <a href="/search" class="user-page-option">See other users</a>
+    <a href="/invitations/<%= user._id %>" class="user-page-option">See invitations</a>
+</div>
+
 
 <% include ./partials/footer.ejs %>

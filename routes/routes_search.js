@@ -8,16 +8,13 @@ router.get('/', isLoggedIn, function(req, res){
         if(err){
             console.log(err);
         } else {
-            console.log("req.user \n", req.user);
-            // Remove users who have been sent an invite and current user's own entry
-            // Problem - user who has no friend invites out does not have own name removed
-            //         - need to handle own name removal separately
+            // Remove current user's own entry
             searchResults.forEach(result =>{
                 if(result._id.equals(req.user._id)){
                     searchResults.splice(searchResults.indexOf(result), 1);
                 }
             })
-
+            // Remove users who have been sent an invite
             if(req.user.friends.length > 0 && searchResults.length > 0){
                 req.user.friends.forEach(friend => {
                     searchResults.forEach(result =>{
