@@ -51,7 +51,7 @@ router.post('/', isLoggedIn, function(req, res){
 })
 
 // LIST - SHOW
-router.get('/:list_id', isLoggedIn, function(req, res){
+router.get('/:list_id', isLoggedIn, isFriendOrOwner, function(req, res){
     Wishlist.findById(req.params.list_id).populate('items').exec(function(err, foundList){
         if(err){
             console.log(err);
@@ -78,11 +78,35 @@ function isLoggedIn(req, res, next){
     res.redirect('/login');
 }
 
-function isCurrentUser(req, res, next){
-    if(req.user === req.params.id){
-        return next();
-    }
-    res.send("You do not have permission to access that thing!");
+function isFriendOrOwner(req, res, next){
+    console.log("isFriend hit");
+    console.log("req.params:\n", req.params);
+    User.findById(req.params.user_id)
+    .populate("friends")
+    .exec(function(err, foundUser){
+        if(err){
+            console.log(err);
+        } else {
+            let cUserIsFriend = false;
+            console.log("foundUser:\n", foundUser);
+            // If user has friends (list is 1 or more), check to see if requested page's owner is among them
+            if(foundUser.friends.length > 0){
+                cUserIsFriend = foundUser.friends.some(function(friend){
+                    return friend._id.equals(req.user.id);
+                });
+            // If user has no friends, set friend check to false
+            }
+            console.log("cUserIsFriend value:\n", cUserIsFriend);
+
+            // If friend or owner, grant permission, otherwise send message
+            if(cUserIsFriend || req.user.id === req.params.user_id){
+                console.log("permission granted");
+                return next();
+            } else {
+                res.send("You must be friends with the user to access this page.");
+            }
+        }
+    })
 }
 
 module.exports = router;

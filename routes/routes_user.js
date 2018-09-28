@@ -13,6 +13,8 @@ router.get('/:id', isLoggedIn, function(req, res){
     })
 });
 
+// ------------------- MIDDLEWARE ---------------------------
+
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
         return next();
@@ -20,11 +22,21 @@ function isLoggedIn(req, res, next){
     res.redirect('/login');
 }
 
-function isCurrentUser(req, res, next){
-    if(req.user === req.params.id){
-        return next();
-    }
-    res.send("You do not have permission to access that thing!");
+function isFriend(req, res, next){
+    console.log("isFriend hit");
+    User.findById(req.params.user_id)
+    .populate("friends")
+    .exec(function(err, foundUser){
+        let cUserIsFriend = foundUser.friends.some(function(friend){
+            return friend._id.equals(req.user.id);
+        });
+        if(cUserIsFriend){
+            console.log("found friend");
+            return next();
+        } else {
+            res.send("You must be friends with the user to access this page.");
+        }
+    })
 }
 
 module.exports = router;

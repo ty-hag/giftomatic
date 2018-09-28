@@ -30,7 +30,7 @@ router.post('/', isLoggedIn, function(req, res){
 });
 
 // ITEM - SHOW
-router.get('/:item_id', isLoggedIn, function(req, res){
+router.get('/:item_id', isLoggedIn, isFriend, function(req, res){
 
     WishlistItem.findById(req.params.item_id).populate("comments").populate('claimedBy').exec(function(err, foundItem){
         if(err){
@@ -61,27 +61,6 @@ router.get('/:item_id', isLoggedIn, function(req, res){
 router.put('/:item_id/', isLoggedIn, function(req, res){
     
     WishlistItem.findById(req.params.item_id).populate('claimedBy').exec(function(err, foundItem){
-        // if(err){
-        //     console.log(err);
-        //     res.redirect('back');
-        // } else {
-        //     console.log('req.user: \n', req.user);
-        //     console.log('foundItem.purchaseStatus: \n', foundItem.purchaseStatus);
-        //     // Handle user claiming item
-        //     if(foundItem.purchaseStatus === 'Unclaimed'){
-        //         foundItem.claimedBy = req.user;
-        //         foundItem.save();
-        //     // Handle user reqlinquishing claim to item
-        //     } else if(req.body.purchaseStatus === 'Unclaimed'){
-        //         foundItem.claimedBy = undefined;
-        //         foundItem.save();
-        //     }
-        //     // Update item's purchaseStatus
-        //     foundItem.purchaseStatus = req.body.purchaseStatus;
-        //     foundItem.save();
-        //     console.log("Currently claimed by: ", foundItem.claimedBy);
-        //     res.json(foundItem);
-        // }
         if(err){
             console.log(err);
             res.redirect('back');
@@ -134,18 +113,42 @@ router.delete('/:item_id', function(req, res){
     });
 });
 
+// ------------ MIDDLEWARE -------------
+
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
         return next();
     }
     res.redirect('/login');
 }
+// Prevents access if cUser is not friend of page owner
+function isFriend(req, res, next){
 
-function isCurrentUser(req, res, next){
-    if(req.user === req.params.id){
-        return next();
-    }
-    res.send("You do not have permission to access that thing!");
+    User.findById(req.params.user_id)
+    .populate("friends")
+    .exec(function(err, foundUser){
+        if(err){
+            console.log(err);
+        } else {
+            let cUserIsFriend = false;
+            console.log("foundUser:\n", foundUser);
+            // If user has friends (list is 1 or more), check to see if requested page's owner is among them
+            if(foundUser.friends.length > 0){
+                cUserIsFriend = foundUser.friends.some(function(friend){
+                    return friend._id.equals(req.user.id);
+                });
+            // If user has no friends, set friend check to false
+            }
+
+            // If friend or owner, grant permission, otherwise send message
+            if(cUserIsFriend){
+                console.log("permission granted");
+                return next();
+            } else {
+                res.send("You must be friends with the user to access this page.");
+            }
+        }
+    })
 }
 
 module.exports = router;

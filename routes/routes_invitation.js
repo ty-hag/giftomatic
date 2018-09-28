@@ -149,7 +149,7 @@ router.post('/:id/answer/:inviter_id', isLoggedIn, function(req, res){
                 }
             });
         })
-        
+    // Do I really need to send an object here?
     res.json({sendAnswer: req.body.answer})
 });
 
