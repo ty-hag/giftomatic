@@ -194,16 +194,24 @@ nav li {
 /* --------------  USER HOME PAGE  ----------------*/
 
 #user-page-option-container{
-    display:flex;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .user-page-option{
-    width: 300px;
+    width: 200px;
     background-color: var(--primary-color);
     color: var(--cream);
     margin: 5px;
     text-align: center;
     display:block;
+    padding: 5px;
+    border-radius: 3px;
+    font-size: 1.2em;
+}
+
+.user-page-option:hover {
+    background-color: var(--primary-light);
 }
 
 /* --------------  WISHLIST LIST PAGE  ----------------*/

@@ -20,14 +20,17 @@ var UserSchema = new mongoose.Schema(
         ],
         friends: [
             {
-                friendStatus: {type: String, default: "pending"},
-                friendObject: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: "User"
-                }
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User"
             }
         ],
-        invitations: [
+        sentInvitations: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User"
+            }
+        ],
+        receivedInvitations: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User"
