@@ -18,6 +18,7 @@ var express = require('express'),
     searchRoutes = require('./routes/routes_search'),
     commentRoutes = require('./routes/routes_comment'),
     invitationRoutes = require('./routes/routes_invitation'),
+    friendsRoutes = require('./routes/routes_friends'),
     expressSanitizer = require('express-sanitizer'),
     seedDB = require('./seed_callbacks');
 
@@ -53,6 +54,7 @@ app.use('/user', userRoutes);
 app.use('/user/:user_id/lists', listRoutes);
 app.use('/user/:user_id/lists/:list_id/items', itemRoutes);
 app.use('/user/:user_id/lists/:list_id/items/:id/comments', commentRoutes);
+app.use('/user/:user_id/friends', friendsRoutes),
 app.use('/search', searchRoutes);
 app.use('/invitations', invitationRoutes);
 

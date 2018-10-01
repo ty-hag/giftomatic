@@ -3,7 +3,7 @@ var router = express.Router({mergeParams:true});
 var Wishlist = require('../models/wishlist');
 var User = require('../models/user');
 
-router.get('/', isLoggedIn, function(req, res){
+router.get('/', isLoggedIn, isFriendOrOwner, function(req, res){
     User.findById(req.params.user_id).populate('myLists').exec(function(err, foundUser){
         if(err){
             console.log(err)

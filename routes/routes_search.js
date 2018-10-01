@@ -15,12 +15,16 @@ router.get('/', isLoggedIn, function(req, res){
                 }
             })
             // Remove users who have been sent an invite
+            // THIS IS BROKEN!
             if(req.user.friends.length > 0 && searchResults.length > 0){
                 req.user.friends.forEach(friend => {
-                    searchResults.forEach(result =>{
-                        console.log("friend id:", friend._id);
-                        console.log("search result user id:",req.user._id);
-                        if(friend._id.equals(result._id)){ // Not sure that friend.friendObject works
+                    searchResults.forEach(result => {
+                        console.log("\nfriend:\n", friend);
+                        console.log("\nfriendObject:\n", friend.friendObject);
+                        console.log("\nresult:\n", result);
+                        console.log("\nresult id:\n", result._id);
+                        if(result._id.equals(friend.friendObject)){ // Not sure that friend.friendObject works
+                            console.log("search result found among friends");
                             searchResults.splice(searchResults.indexOf(result), 1);
                         }
                     })

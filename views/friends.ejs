@@ -1,0 +1,9 @@
+<% include ./partials/header.ejs %>
+
+Click a user's name to see their lists.
+
+<% foundUser.friends.forEach(function(friend){ %>
+    <li><a href="/user/<%= friend._id %>/lists"><%= friend.firstName %> <%= friend.lastName %></a></li>
+<% }) %>
+
+<% include ./partials/footer.ejs %>
