@@ -3,11 +3,12 @@ var User = require('../models/user');
 var Wishlist = require('../models/wishlist');
 var WishlistItem = require('../models/wishlistItem');
 var Comment = require('../models/comment');
+var myAuthMiddleware = require("../my_auth_middleware");
 
 var router = express.Router({mergeParams:true});
 
 // COMMENT - CREATE
-router.post('/', function(req, res){
+router.post('/', myAuthMiddleware.isFriend, function(req, res){
     console.log('req.params.id: \n', req.params.id);
     
     Comment.create(req.body.comment, function(err, newComment){

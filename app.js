@@ -20,6 +20,7 @@ var express = require('express'),
     invitationRoutes = require('./routes/routes_invitation'),
     friendsRoutes = require('./routes/routes_friends'),
     expressSanitizer = require('express-sanitizer'),
+    myAuthMiddleware = require('./my_auth_middleware'),
     seedDB = require('./seed_callbacks');
 
 mongoose.connect("mongodb://localhost:27017/giftOMatic", {useNewUrlParser: true});
@@ -56,7 +57,7 @@ app.use('/user/:user_id/lists/:list_id/items', itemRoutes);
 app.use('/user/:user_id/lists/:list_id/items/:id/comments', commentRoutes);
 app.use('/user/:user_id/friends', friendsRoutes),
 app.use('/search', searchRoutes);
-app.use('/invitations', invitationRoutes);
+app.use('/user/:user_id/invitations', invitationRoutes);
 
 ///============== ROUTES ========================
 
