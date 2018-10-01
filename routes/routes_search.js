@@ -8,6 +8,8 @@ router.get('/', isLoggedIn, function(req, res){
         if(err){
             console.log(err);
         } else {
+            console.log("req.user.friends:");
+            console.log(req.user.friends);
             // Remove current user's own entry
             searchResults.forEach(result =>{
                 if(result._id.equals(req.user._id)){
@@ -15,21 +17,22 @@ router.get('/', isLoggedIn, function(req, res){
                 }
             })
             // Remove users who have been sent an invite
-            // THIS IS BROKEN!
             if(req.user.friends.length > 0 && searchResults.length > 0){
                 req.user.friends.forEach(friend => {
                     searchResults.forEach(result => {
                         console.log("\nfriend:\n", friend);
-                        console.log("\nfriendObject:\n", friend.friendObject);
                         console.log("\nresult:\n", result);
                         console.log("\nresult id:\n", result._id);
-                        if(result._id.equals(friend.friendObject)){ // Not sure that friend.friendObject works
+                        if(result._id.equals(friend)){ // req.user.friends appears to be an array of friends' IDs
                             console.log("search result found among friends");
                             searchResults.splice(searchResults.indexOf(result), 1);
                         }
                     })
                 })
             }
+
+            // Remove users who are already friends
+
             // Put results in alphebetical order by last name
             searchResults.sort(function(a, b){
                 if(a.lastName.toLowerCase() > b.lastName.toLowerCase()){
