@@ -5,7 +5,7 @@ Here are all the users you are not yet friends with, sorted by last name.
 <% searchResults.forEach(function(user){ %>
     <li class='user-search-result'>
         <span class='user-result-name'><%= user.firstName %> <%= user.lastName %></span>
-        <span data-route="/invitations/sendInvite/<%= user._id %>" class="btn send-friend-invite">Send friend invite</span>
+        <span data-route="user/<%= currentUser._id %>/invitations/sendInvite/<%= user._id %>" class="btn send-friend-invite">Send friend invite</span>
     </li>
 <% }) %>
 

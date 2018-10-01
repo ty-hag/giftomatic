@@ -3,7 +3,7 @@
 
 <!-- Show each invitation -->
 <% user.receivedInvitations.forEach( invite => { %>
-    <li class='invitation' data-answer-url="/invitations/<%= currentUser._id %>/answer/<%= invite._id %>">
+    <li class='invitation' data-answer-url="user/<%= currentUser._id %>/invitations/answer/<%= invite._id %>">
         Invitation from <%= invite.firstName %> <%= invite.lastName %>
         <!-- Need AJAX handling for each of these buttons -->
         <i id="invite-accept" class="fa fa-check btn-approve" aria-hidden="true"></i>

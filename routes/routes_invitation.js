@@ -1,11 +1,12 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var User = require("../models/user");
+var myAuthMiddleware = require("../my_auth_middleware");
 
 var router = new express.Router({mergeParams: true});
 
 // Handle sending of invitations
-router.get('/sendInvite/:id', isLoggedIn, function(req, res){
+router.get('/sendInvite/:id', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, function(req, res){
     User.findById(req.params.id)
     .populate("sentInvitations")
     .populate("receivedInvitations")
@@ -73,8 +74,8 @@ router.get('/sendInvite/:id', isLoggedIn, function(req, res){
 });
 
 // View a user's invitations
-router.get('/:id', isLoggedIn, function(req, res){
-    User.findById(req.params.id)
+router.get('/', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, function(req, res){
+    User.findById(req.params.user_id)
     .populate('receivedInvitations')
     .populate('sentInvitations')
     .populate('friends')
@@ -88,7 +89,7 @@ router.get('/:id', isLoggedIn, function(req, res){
 })
 
 // Handle accept/reject of invitation
-router.post('/:id/answer/:inviter_id', isLoggedIn, function(req, res){
+router.post('/:id/answer/:inviter_id', myAuthMiddleware.isLoggedIn, function(req, res){
 
         User.findById(req.params.id)
         .populate("sentInvitations")
@@ -152,22 +153,5 @@ router.post('/:id/answer/:inviter_id', isLoggedIn, function(req, res){
     // Do I really need to send an object here?
     res.json({sendAnswer: req.body.answer})
 });
-
-// ---------- MIDDLEWARE ----------------
-
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect('/login');
-}
-
-function isOwner(req, res, next){
-    if(req.params.user_id.equals(req.user.id)){
-        next;
-    } else {
-        res.send('You do not have access to that.');
-    }
-}
 
 module.exports = router;
