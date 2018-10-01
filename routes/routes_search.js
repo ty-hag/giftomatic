@@ -8,31 +8,33 @@ router.get('/', isLoggedIn, function(req, res){
         if(err){
             console.log(err);
         } else {
-            console.log("req.user.friends:");
-            console.log(req.user.friends);
             // Remove current user's own entry
             searchResults.forEach(result =>{
                 if(result._id.equals(req.user._id)){
                     searchResults.splice(searchResults.indexOf(result), 1);
                 }
             })
-            // Remove users who have been sent an invite
+            // Remove friends from results
             if(req.user.friends.length > 0 && searchResults.length > 0){
                 req.user.friends.forEach(friend => {
                     searchResults.forEach(result => {
-                        console.log("\nfriend:\n", friend);
-                        console.log("\nresult:\n", result);
-                        console.log("\nresult id:\n", result._id);
                         if(result._id.equals(friend)){ // req.user.friends appears to be an array of friends' IDs
-                            console.log("search result found among friends");
                             searchResults.splice(searchResults.indexOf(result), 1);
                         }
                     })
                 })
             }
 
-            // Remove users who are already friends
-
+            // Remove users who have already been invited from results
+            if(req.user.sentInvitations.length > 0 && searchResults.length > 0){
+                req.user.sentInvitations.forEach(invite =>{
+                    searchResults.forEach(result => {
+                        if(result._id.equals(invite)){
+                            searchResults.splice(searchResults.indexOf(result), 1);
+                        }
+                    })
+                })
+            }
             // Put results in alphebetical order by last name
             searchResults.sort(function(a, b){
                 if(a.lastName.toLowerCase() > b.lastName.toLowerCase()){
