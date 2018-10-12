@@ -1,0 +1,19 @@
+<% include ./partials/header.ejs %>
+
+<h2>Create a new gift exchange</h2>
+
+<form action="/user/<%= currentUser._id %>/exchange/addNew" method="POST">
+<label>
+    Exchange name
+    <input type="text" name="newExchange[name]">
+</label>
+<label>
+    Spend limit
+    <input type="number" name="newExchange[spendLimit]">
+</label>
+<label>Submit
+    <input type="submit">
+</label>
+</form>
+
+<% include ./partials/footer.ejs %>

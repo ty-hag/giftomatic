@@ -1,5 +1,6 @@
 var express = require("express");
 var mongoose = require("mongoose");
+var User = require("./models/user");
 
 var myAuthMiddleware = {};
 
@@ -36,6 +37,33 @@ myAuthMiddleware.isFriend = function(req, res, next){
             return next();
         } else {
             res.send("You must be friends with the user to access this page.");
+        }
+    })
+}
+
+myAuthMiddleware.isFriendOrOwner = function(req, res, next){
+    console.log("isFriend hit");
+    User.findById(req.params.user_id)
+    .populate("friends")
+    .exec(function(err, foundUser){
+        if(err){
+            console.log(err);
+        } else {
+            let cUserIsFriend = false;
+            // If user has friends (list is 1 or more), check to see if requested page's owner is among them
+            if(foundUser.friends.length > 0){
+                cUserIsFriend = foundUser.friends.some(function(friend){
+                    return friend._id.equals(req.user.id);
+                });
+            // If user has no friends, set friend check to false
+            }
+
+            // If friend or owner, grant permission, otherwise send message
+            if(cUserIsFriend || req.user.id === req.params.user_id){
+                return next();
+            } else {
+                res.send("You must be friends with the user to access this page.");
+            }
         }
     })
 }

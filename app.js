@@ -19,6 +19,7 @@ var express = require('express'),
     commentRoutes = require('./routes/routes_comment'),
     invitationRoutes = require('./routes/routes_invitation'),
     friendsRoutes = require('./routes/routes_friends'),
+    exchangeRoutes = require('./routes/routes_exchange'),
     expressSanitizer = require('express-sanitizer'),
     myAuthMiddleware = require('./my_auth_middleware'),
     seedDB = require('./seed_callbacks');
@@ -58,6 +59,7 @@ app.use('/user/:user_id/lists/:list_id/items/:id/comments', commentRoutes);
 app.use('/user/:user_id/friends', friendsRoutes),
 app.use('/search', searchRoutes);
 app.use('/user/:user_id/invitations', invitationRoutes);
+app.use('/user/:user_id/exchange', exchangeRoutes);
 
 ///============== ROUTES ========================
 
