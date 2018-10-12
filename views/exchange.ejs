@@ -1,0 +1,8 @@
+<% include ./partials/header.ejs %>
+
+<a href="/user/<%= currentUser.id %>/exchange/new">Start a new exchange</a>
+
+Exchanges you're in:
+<%= currentUser.joinedExchanges %>
+
+<% include ./partials/footer.ejs %>

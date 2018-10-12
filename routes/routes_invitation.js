@@ -5,7 +5,7 @@ var myAuthMiddleware = require("../my_auth_middleware");
 
 var router = new express.Router({mergeParams: true});
 
-// Handle sending of invitations
+// Handle sending of friend invitations
 router.get('/sendInvite/:id', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, function(req, res){
     User.findById(req.params.id)
     .populate("sentInvitations")
@@ -89,9 +89,10 @@ router.get('/', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, function(
 })
 
 // Handle accept/reject of invitation
-router.post('/:id/answer/:inviter_id', myAuthMiddleware.isLoggedIn, function(req, res){
+router.post('/answer/:inviter_id', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, function(req, res){
 
-        User.findById(req.params.id)
+        console.log("Accept/reject route hit.");
+        User.findById(req.params.user_id)
         .populate("sentInvitations")
         .populate("receivedInvitations")
         .populate("friends")
@@ -144,8 +145,6 @@ router.post('/:id/answer/:inviter_id', myAuthMiddleware.isLoggedIn, function(req
                         // save changes
                         foundUser.save();
                         foundInviter.save();
-                        console.log("foundUser after:\n", foundUser);
-                        console.log("foundInviter after:\n", foundInviter);
                     }
                 })
             }
