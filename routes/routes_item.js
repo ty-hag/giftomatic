@@ -80,7 +80,6 @@ router.put('/:item_id/', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isFriend,
                 // Update item's purchaseStatus
                 foundItem.purchaseStatus = req.body.purchaseStatus;
                 foundItem.save();
-                console.log("Currently claimed by: ", foundItem.claimedBy);
                 res.json(foundItem);
             } else {
                 res.json({cantClaim: true});
