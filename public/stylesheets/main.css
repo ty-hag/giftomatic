@@ -324,3 +324,9 @@ nav li {
 .invitation {
     margin-top: 5px;
 }
+
+/* --------------  EXCHANGE CREATION PAGE  ----------------*/
+
+.exchange-friend-notAdded, .exchange-friend-added {
+    cursor: pointer;
+}

@@ -2,15 +2,6 @@ console.log('ajax file loaded');
 
 //-------------- ITEM PAGE-----------------
 
-//set purchase status with respect to buttons
-$(document).ready(function(){
-    if($('#purchase-status-value').val()){
-        let purchaseStatus = $('#purchase-status-value').val();
-        $('.selected').toggleClass('selected');
-        $(`#${purchaseStatus.toLowerCase()}`).toggleClass('selected');
-    }
-})
-
 // update purchase status on click
 $('.item-status-button').on('click', function(e){
     e.preventDefault();
@@ -84,17 +75,6 @@ $('#add-comment-form').submit(function(e){
         }
     });
 });
-
-$('#show-item-form').on('click', function(){
-    if($('#new-item-form').css('display') === 'none'){
-        $('#new-item-form').toggle();
-    }
-});
-
-$('#close-add-item').on('click', function(){
-    $('#new-item-form input').val('');
-    $('#new-item-form').toggle();
-})
 
 //-------------- LIST PAGE -------------------
 // Add new item form
