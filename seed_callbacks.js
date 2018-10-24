@@ -71,6 +71,17 @@ function seedDB(){
                     console.log(err);
                 } else {
                     console.log("Removed pairings.")
+                    User.find({}, function(err, foundUsers){
+                        if(err){
+                            console.log(err);
+                        } else {
+                            foundUsers.forEach(user => {
+                                user.joinedExchanges = [];
+                                user.save();
+                            });
+                            console.log("Cleared users' joinedExchanges.");
+                        }
+                    })
                 }
             })
         }

@@ -23,6 +23,33 @@ $('#close-add-item').on('click', function(){
 
 //-------------- EXCHANGE CREATION PAGE -------------------
 
+// Prevent submission of exchange with less than three people
+$('#exchange-setup').submit(function(e){
+    console.log("Hit exchange setup JS.")
+    // Clear warning message
+    $('#exchange-length-warning').html('');
+
+    let formData = $('#exchange-setup').serializeArray();
+
+    // Make list of members from form data. If list length is less than 2,
+    // stop submission and display message.
+    let participantCheck = [];
+    formData.forEach(data => {
+        if(data.name === `newExchange[members]`){
+            participantCheck.push(data);
+        }
+    });
+    console.log(`participantCheck.length: ${participantCheck.length}`);
+    if(participantCheck.length > 1){
+        console.log("Greater than 1.")
+        return true;
+    } else {
+        console.log("Less than 1.");
+        $('#exchange-length-warning').html('You must add at least two people to your exchange.');
+        return false;
+    }
+})
+
 // Remove friend from list of potential participants, add to added people as hidden input
 // This version for the initial click
 $('.exchange-friend-notAdded').on("click", function(){
