@@ -13,10 +13,10 @@ var exchangeSchema = new mongoose.Schema(
                 ref: "User"
             }
         ],
-        pairings: [
+        pairings:[
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "User"
+                ref: "Pairing"
             }
         ],
         spendLimit: Number
