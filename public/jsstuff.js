@@ -25,28 +25,52 @@ $('#close-add-item').on('click', function(){
 
 // Prevent submission of exchange with less than three people
 $('#exchange-setup').submit(function(e){
+    
     console.log("Hit exchange setup JS.")
     // Clear warning message
     $('#exchange-length-warning').html('');
 
     let formData = $('#exchange-setup').serializeArray();
+    console.log(`formData`);
+    console.log(formData);
 
     // Make list of members from form data. If list length is less than 2,
-    // stop submission and display message.
+    // or name or spend limit is missing, stop submission and display message.
     let participantCheck = [];
+    let nameCheck = true;
+    let spendLimitCheck = true;
+    // Organize data to check for adequate list length and missing name/limit fields
     formData.forEach(data => {
+        console.log('data');
+        console.log(data);
+        console.log(data.value);
+        console.log('');
         if(data.name === `newExchange[members]`){
             participantCheck.push(data);
+        } else if (data.name === `newExchange[name]` && !data.value){
+            nameCheck = false;
+        } else if (data.name === `newExchange[spendLimit]` && !data.value){
+            spendLimitCheck = false;
         }
     });
-    console.log(`participantCheck.length: ${participantCheck.length}`);
-    if(participantCheck.length > 1){
-        console.log("Greater than 1.")
-        return true;
-    } else {
-        console.log("Less than 1.");
+    console.log(`participantCheck:`);
+    console.log(participantCheck);
+    if(participantCheck.length < 2){
+        console.log("Less than 2.");
         $('#exchange-length-warning').html('You must add at least two people to your exchange.');
+        console.log('BUTTHOLE1');
         return false;
+    } else if(!nameCheck){
+        $('#exchange-length-warning').html('You must give your exchange a name.');
+        console.log('BUTTHOLE2');
+        return false;
+    } else if(!spendLimitCheck){
+        $('#exchange-length-warning').html('You must specify a spend limit.');
+        console.log('BUTTHOLE3');
+        return false;
+    } else {
+        console.log('BUTTHOLE4');
+        return true;
     }
 })
 

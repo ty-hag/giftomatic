@@ -3,6 +3,9 @@
 <div><a href="/user/<%= currentUser.id %>/exchange/new">Start a new exchange</a></div>
 
 <h2>Exchanges you're in:</h2>
-<%= currentUser.joinedExchanges %>
+<% foundUser.joinedExchanges.forEach(function(exchange){ %>
+    <h3><%= exchange.name %></h3>
+    <div>Spend limit: <%= exchange.spendLimit %></div>
+<% }); %>
 
 <% include ./partials/footer.ejs %>
