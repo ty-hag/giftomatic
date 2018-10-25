@@ -14,7 +14,6 @@ myAuthMiddleware.isLoggedIn = function(req, res, next){
 
 // Prevents everyone but user that owns that page (list) from accessing route
 myAuthMiddleware.isOwner = function(req, res, next){
-    console.log("isOwner hit");
     if(req.user._id.equals(req.params.user_id)){
         next();
     } else {
@@ -25,7 +24,6 @@ myAuthMiddleware.isOwner = function(req, res, next){
 // Prevents people who are not friends with owner from accessing page
 // Also excludes owner themself
 myAuthMiddleware.isFriend = function(req, res, next){
-    console.log("isFriend hit");
     User.findById(req.params.user_id)
     .populate("friends")
     .exec(function(err, foundUser){
@@ -33,7 +31,6 @@ myAuthMiddleware.isFriend = function(req, res, next){
             return friend._id.equals(req.user.id);
         });
         if(cUserIsFriend){
-            console.log("found friend");
             return next();
         } else {
             res.send("You must be friends with the user to access this page.");
@@ -42,7 +39,6 @@ myAuthMiddleware.isFriend = function(req, res, next){
 }
 
 myAuthMiddleware.isFriendOrOwner = function(req, res, next){
-    console.log("isFriend hit");
     User.findById(req.params.user_id)
     .populate("friends")
     .exec(function(err, foundUser){

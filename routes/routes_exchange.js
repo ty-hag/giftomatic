@@ -9,11 +9,19 @@ var router = express.Router({mergeParams: true});
 
 // Show info from exchanges user is participating in, link to create new exchange
 router.get('/', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, function(req, res){
-    //need to get user's exchange/pairing info
-    res.render("exchange");
-})
+    // Get info from user's current exchanges
+    User.findById(req.params.user_id)
+    .populate("joinedExchanges")
+    .exec(function(err, foundUser){
+        console.log('foundUser.joinedExchanges:');
+        console.log(foundUser.joinedExchanges);
+        res.render("exchange", {
+            foundUser: foundUser,
+        });
+    })
+});
 
-// Show new exchange creation pagevar
+// Show new exchange creation page
 router.get('/new', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, function(req, res){
     User.findById(req.user)
     .populate('friends')
@@ -26,9 +34,10 @@ router.get('/new', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, functi
     })
 })
 
+// Process creation of new exchange
 router.post('/addNew', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, function(req, res){
-    console.log("Add new exchange route hit.");
-    // // List of participant ID strings
+    console.log("Hit new exchange creation route.");
+    // List of participant ID strings
     let idStrings = req.body.newExchange.members; // This will be used later
     // Convert array of user ID strings to User ID objects
     let participantIds = idStrings.map(id => mongoose.Types.ObjectId(id));
@@ -76,8 +85,6 @@ router.post('/addNew', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, fu
                             // and comparing it to the last entry in the shuffled list.
                             // If the last entry doesn't match, pair them up. If it does,
                             // pair with the first entry.
-                            // Note: If the list has an odd number of participants, one person
-                            // will be paired with themself -- they should buy themself a gift.
 
                             // Shuffle original list
                             let shuffledList = shuffle(createdExchange.members.slice());
@@ -96,7 +103,10 @@ router.post('/addNew', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, fu
                             })
                             // Save updates to pairings.
                             createdPairings.forEach(pairing => pairing.save());
-                            res.render('exchange');
+                            // Add pairings to exchange object
+                            createdPairings.forEach(pairing => createdExchange.pairings.push(pairing._id));
+                            createdExchange.save();
+                            res.redirect(`/user/${req.user.id}/exchange/`);;
                         }
                     })
                 }
