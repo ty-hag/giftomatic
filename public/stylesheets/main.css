@@ -325,6 +325,12 @@ nav li {
     margin-top: 5px;
 }
 
+/* --------------  EXCHANGE PAGE  ----------------*/
+
+.exchange-display {
+    margin: 10px;
+}
+
 /* --------------  EXCHANGE CREATION PAGE  ----------------*/
 
 .exchange-friend-notAdded, .exchange-friend-added {

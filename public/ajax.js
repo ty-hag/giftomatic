@@ -187,3 +187,28 @@ $("#invite-delete").on('click', function(){
         }
     )
 })
+
+// ------------------ EXCHANGE PAGE ----------------------
+$('.btn').on('click', function(){
+    let $clickedExchangeDiv = $(this).parent();
+    let sendData = {};
+    sendData.pairId = $(this).attr('data-pair-id');
+    sendData.notes = $(this).parent().children('textarea').val();
+
+    let routeUrl = $(this).attr('data-url');
+
+    $.ajax(
+        {
+            url: routeUrl,
+            data: sendData,
+            type: "POST",
+            dataType: 'json',
+            success: function(responseData){
+                console.log(responseData);
+                console.log($clickedExchangeDiv);
+                $clickedExchangeDiv.children('.msg-send-confirm').html('Notes updated!');
+            }
+        }
+    )
+
+})
