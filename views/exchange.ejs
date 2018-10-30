@@ -3,9 +3,18 @@
 <div><a href="/user/<%= currentUser.id %>/exchange/new">Start a new exchange</a></div>
 
 <h2>Exchanges you're in:</h2>
-<% foundUser.joinedExchanges.forEach(function(exchange){ %>
-    <h3><%= exchange.name %></h3>
-    <div>Spend limit: <%= exchange.spendLimit %></div>
+<% foundPairing.forEach(function(pairing){ %>
+    <div class="exchange-display">
+        <h3>Name: <%= pairing.exchangeGroup.name %></h3>
+        <div>Spend limit: $<%= pairing.exchangeGroup.spendLimit %></div>
+        <div>Pair: <%= `${pairing.pair.firstName} ${pairing.pair.lastName}` %></div>
+        <h4>Notes from your pair:</h4>
+        <div><pre><%= pairing.notesFromPair %></pre></div>
+        <h4>Notes for your pair:</h4>
+        <textarea><%= pairing.notesForPair %></textarea>
+        <span class="btn" data-url="/user/<%= currentUser.id %>/exchange/<%= pairing.exchangeGroup._id %>/updatePairingNotes" data-pair-id="<%= pairing.pair._id %>">Send notes</span>
+        <div class="msg-send-confirm"></div>
+    </div>
 <% }); %>
 
 <% include ./partials/footer.ejs %>

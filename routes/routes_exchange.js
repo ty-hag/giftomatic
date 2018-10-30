@@ -2,22 +2,23 @@ var express = require("express");
 var mongoose = require("mongoose");
 var User = require("../models/user");
 var Exchange = require("../models/exchange");
-var Pairings = require("../models/pairing");
+var Pairing = require("../models/pairing");
 var myAuthMiddleware = require("../my_auth_middleware");
 
 var router = express.Router({mergeParams: true});
 
 // Show info from exchanges user is participating in, link to create new exchange
 router.get('/', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, function(req, res){
-    // Get info from user's current exchanges
-    User.findById(req.params.user_id)
-    .populate("joinedExchanges")
-    .exec(function(err, foundUser){
-        console.log('foundUser.joinedExchanges:');
-        console.log(foundUser.joinedExchanges);
-        res.render("exchange", {
-            foundUser: foundUser,
-        });
+
+    Pairing.find({ assignee: req.params.user_id })
+    .populate("exchangeGroup")
+    .populate("pair")
+    .exec(function(err, foundPairing){
+        if(err){
+            console.log(err);
+        } else {
+            res.render("exchange", {foundPairing: foundPairing});
+        }
     })
 });
 
@@ -56,6 +57,8 @@ router.post('/addNew', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, fu
                 } else {
                     createdExchange.members = foundIds;
                     createdExchange.admin = req.user;
+                    createdExchange.spendLimit = req.body.newExchange.spendLimit;
+                    createdExchange.name = req.body.newExchange.name;
                     createdExchange.save();
 
                     // Save this exchange to each user's joinedExchanges attribute
@@ -75,7 +78,7 @@ router.post('/addNew', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, fu
                     // Create initial pairing objects with list of participants.
                     // Pairs will not be assigned yet. Only the "assignee" field
                     // will be filled
-                    Pairings.create(pairingCreationList, function(err, createdPairings){
+                    Pairing.create(pairingCreationList, function(err, createdPairings){
                         if(err){
                             console.log(err);
                         } else {
@@ -90,6 +93,8 @@ router.post('/addNew', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, fu
                             let shuffledList = shuffle(createdExchange.members.slice());
 
                             // Loop over original list and test for matches
+                            // Also add exchange's id to exchangeGroup attribute
+                            // Also add pairings to exchange object
                             createdPairings.forEach(function(pairing){
                                 let endOfList = shuffledList[shuffledList.length - 1];
                                 if(!pairing.assignee._id.equals(endOfList._id)){
@@ -100,13 +105,12 @@ router.post('/addNew', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, fu
                                     // person on list.
                                     pairing.pair = shuffledList.shift();
                                 }
+                                pairing.exchangeGroup = createdExchange;
+                                pairing.save();
+                                createdExchange.pairings.push(pairing._id);
                             })
-                            // Save updates to pairings.
-                            createdPairings.forEach(pairing => pairing.save());
-                            // Add pairings to exchange object
-                            createdPairings.forEach(pairing => createdExchange.pairings.push(pairing._id));
                             createdExchange.save();
-                            res.redirect(`/user/${req.user.id}/exchange/`);;
+                            res.redirect(`/user/${req.user.id}/exchange/`);
                         }
                     })
                 }
@@ -114,6 +118,44 @@ router.post('/addNew', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, fu
         }
     })
 })
+
+// Update pairing comments
+router.post('/:exchange_id/updatePairingNotes', function(req, res){
+    // Note to self: req.body contains whatever is sent in the "data"
+    // attribute through the ajax method's argument object
+    let notes = req.body.notes;
+
+    // Look up pairing of current user and pairing obj for whwhever
+    // current user is pair. Update messages.
+    Pairing.find({assignee: req.user._id, exchangeGroup: req.params.exchange_id }, function(err, foundWhereAssignee){
+        if(err){
+            console.log(err);
+        } else {
+            Pairing.find({pair: req.user._id, exchangeGroup: req.params.exchange_id}, function(err, foundWherePair){
+                if(err){
+                    console.log(err);
+                } else {
+                    // Note: the Document.find() method returns an array, even if there is only one result. Thus,
+                    // I have to use [0] to access the actual Document objects here.
+
+                    foundWhereAssignee[0].notesForPair =notes;
+                    foundWherePair[0].notesFromPair = notes;
+                    foundWhereAssignee[0].save();
+                    foundWherePair[0].save();
+                    console.log(`foundWherePair:`);
+                    console.log(foundWherePair);
+                    console.log(`foundWhereAssignee:`);
+                    console.log(foundWhereAssignee);
+                    // TODO: Update page with AJAX? No need?
+                    res.json({success: true});
+                }
+            })
+        }
+    })
+
+})
+
+// ------ FUNCTIONS ---------------
 
 function assignPairs(participantList){
     let pairingList = shuffle(participantList.slice());
