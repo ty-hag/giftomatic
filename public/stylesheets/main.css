@@ -115,6 +115,11 @@ pre {
     font-weight: normal;
 }
 
+.boxed {
+    border: 1px solid #083851;
+    padding: 3px;
+}
+
 /* ----------- HEADER ------------------- */
 
 header {
@@ -329,6 +334,11 @@ nav li {
 
 .exchange-display {
     margin: 10px;
+}
+
+.exchange-display-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 /* --------------  EXCHANGE CREATION PAGE  ----------------*/
