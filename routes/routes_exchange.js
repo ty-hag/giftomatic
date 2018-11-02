@@ -11,7 +11,13 @@ var router = express.Router({mergeParams: true});
 router.get('/', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, function(req, res){
 
     Pairing.find({ assignee: req.params.user_id })
-    .populate("exchangeGroup")
+    .populate({
+        path: 'exchangeGroup',
+        populate: {
+            path: 'admin',
+            model: 'User'
+        }
+    })
     .populate("pair")
     .exec(function(err, foundPairing){
         if(err){
@@ -60,6 +66,8 @@ router.post('/addNew', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, fu
                     createdExchange.spendLimit = req.body.newExchange.spendLimit;
                     createdExchange.name = req.body.newExchange.name;
                     createdExchange.save();
+                    console.log(`createdExchange.admin:`);
+                    console.log(createdExchange.admin);
 
                     // Save this exchange to each user's joinedExchanges attribute
                     foundIds.forEach(function(user){
@@ -152,8 +160,9 @@ router.post('/:exchange_id/updatePairingNotes', function(req, res){
             })
         }
     })
-
 })
+
+
 
 // ------ FUNCTIONS ---------------
 
