@@ -66,8 +66,6 @@ router.post('/addNew', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, fu
                     createdExchange.spendLimit = req.body.newExchange.spendLimit;
                     createdExchange.name = req.body.newExchange.name;
                     createdExchange.save();
-                    console.log(`createdExchange.admin:`);
-                    console.log(createdExchange.admin);
 
                     // Save this exchange to each user's joinedExchanges attribute
                     foundIds.forEach(function(user){
@@ -150,11 +148,6 @@ router.post('/:exchange_id/updatePairingNotes', function(req, res){
                     foundWherePair[0].notesFromPair = notes;
                     foundWhereAssignee[0].save();
                     foundWherePair[0].save();
-                    console.log(`foundWherePair:`);
-                    console.log(foundWherePair);
-                    console.log(`foundWhereAssignee:`);
-                    console.log(foundWhereAssignee);
-                    // TODO: Update page with AJAX? No need?
                     res.json({success: true});
                 }
             })
@@ -162,6 +155,30 @@ router.post('/:exchange_id/updatePairingNotes', function(req, res){
     })
 })
 
+router.put('/:pairing_id/updatePairingStatus', function(req, res){
+// Update pairing gift purchase status
+    Pairing.findById(req.params.pairing_id, function(err, foundPairing){
+        if(err){
+            console.log(err);
+        } else {
+            if(foundPairing.status === "No."){
+                foundPairing.status = "Yes.";
+                foundPairing.save();
+                res.json({
+                    htmlText: 'Did you buy a gift: Yes!',
+                    buttonText: "Reset"
+                });
+            } else {
+                foundPairing.status = "No.";
+                foundPairing.save();
+                res.json({
+                    htmlText: 'Did you buy a gift? No.',
+                    buttonText: "I bought it!"
+                });
+            }
+        }
+    })
+})
 
 
 // ------ FUNCTIONS ---------------

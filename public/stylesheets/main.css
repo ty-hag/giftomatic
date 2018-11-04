@@ -63,9 +63,10 @@ a {
     font-family: var(--main-font);
     color: var(--cream);
     border: none;
+    margin: 2px;
     padding: 3px;
     border-radius: 3px;
-    display: inline;
+    display: inline-block;
     cursor: pointer;
 }
 

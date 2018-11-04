@@ -10,7 +10,7 @@ var pairingSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         },
-        status: {type:String, default:"Pending"},
+        status: {type:String, default:"No."},
         notesFromPair: {type:String, default:"No notes yet."},
         notesForPair: {type:String, default:"No notes yet."},
         exchangeGroup: {
