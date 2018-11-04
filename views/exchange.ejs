@@ -11,7 +11,12 @@
                 <div>Admin: <%= pairing.exchangeGroup.admin.firstName %> <%= pairing.exchangeGroup.admin.lastName %></div>
                 <div>Spend limit: $<%= pairing.exchangeGroup.spendLimit %></div>
                 <div>Your assigned pair: <%= `${pairing.pair.firstName} ${pairing.pair.lastName}` %></div>
-                <div>Status: <%= pairing.status %></div>
+                <div class="pairing-status">Did you buy a gift? <%= pairing.status %> </div> 
+                <% if(pairing.status = "No."){ %>
+                    <div class="btn pairing-status-update" data-url="/user/<%= currentUser.id %>/exchange/<%= pairing._id %>/updatePairingStatus?_method=PUT">I bought it!</div>
+                <% } else { %>
+                    <div class="btn pairing-status-update" data-url="/user/<%= currentUser.id %>/exchange/<%= pairing._id %>/updatePairingStatus?_method=PUT">Reset</div>
+                <% } %>
             </div>
             <div>
                 <h4>Notes from your pair:</h4>
@@ -20,7 +25,7 @@
             <div>
                 <h4>Notes for your pair:</h4>
                 <textarea><%= pairing.notesForPair %></textarea>
-                <span class="btn" data-url="/user/<%= currentUser.id %>/exchange/<%= pairing.exchangeGroup._id %>/updatePairingNotes" data-pair-id="<%= pairing.pair._id %>">Send notes</span>
+                <div class="btn notes-update" data-url="/user/<%= currentUser.id %>/exchange/<%= pairing.exchangeGroup._id %>/updatePairingNotes" data-pair-id="<%= pairing.pair._id %>">Send notes</div>
                 <div class="msg-send-confirm"></div>
             </div>
         </div>

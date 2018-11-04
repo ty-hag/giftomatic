@@ -189,7 +189,7 @@ $("#invite-delete").on('click', function(){
 })
 
 // ------------------ EXCHANGE PAGE ----------------------
-$('.btn').on('click', function(){
+$('.notes-update').on('click', function(){
     let $clickedExchangeDiv = $(this).parent();
     let sendData = {};
     sendData.pairId = $(this).attr('data-pair-id');
@@ -210,5 +210,26 @@ $('.btn').on('click', function(){
             }
         }
     )
+});
 
-})
+$('.pairing-status-update').on('click', function(){
+    // Update pairing's gift purchase status in DB
+    console.log("Pairing status update clicked.");
+    let $clickedButton =$(this);
+    let $clickedPairingDiv = $(this).parent();
+    let routeUrl = $(this).attr('data-url');
+    console.log($(this).attr('data-url')); 
+
+    $.ajax(
+        {
+            url: routeUrl,
+            type: "PUT",
+            success: function(responseData){
+                $clickedButton.html(responseData.buttonText);
+                $clickedPairingDiv.children('.pairing-status').html(responseData.htmlText);
+            }
+        }
+    )
+    // TODO: Change status on page
+    console.log("clicked");
+});
