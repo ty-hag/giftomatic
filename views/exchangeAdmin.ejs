@@ -1,0 +1,11 @@
+<% include ./partials/header.ejs %>
+
+<h2><%= exchange.name %></h2>
+<% exchange.pairings.forEach( pairing => { %>
+<div><%= pairing.assignee.firstName %> <%= pairing.assignee.lastName %>
+    giving to <%= pairing.pair.firstName %> <%= pairing.pair.lastName %>,
+    status: <%= pairing.status %>
+</div>
+<% }) %>
+
+<% include ./partials/footer.ejs %>
