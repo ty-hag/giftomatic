@@ -8,6 +8,9 @@
         <h3>Name: <%= pairing.exchangeGroup.name %></h3>
         <div class="exchange-display-container">
             <div>
+                <% if (pairing.exchangeGroup.admin._id.equals(currentUser.id)){ %>
+                <a href="/user/<%= currentUser.id %>/exchange/<%= pairing.exchangeGroup._id %>/admin" class="btn">Admin page</a>
+                <% } %>
                 <div>Admin: <%= pairing.exchangeGroup.admin.firstName %> <%= pairing.exchangeGroup.admin.lastName %></div>
                 <div>Spend limit: $<%= pairing.exchangeGroup.spendLimit %></div>
                 <div>Your assigned pair: <%= `${pairing.pair.firstName} ${pairing.pair.lastName}` %></div>

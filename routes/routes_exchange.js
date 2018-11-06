@@ -28,6 +28,35 @@ router.get('/', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, function(
     })
 });
 
+// TODO:    ADMIN route
+//          Create link for each exchange in exchanges page
+//          Create admin page showing status of each pairing
+//          Route for admin page
+router.get('/:exchange_id/admin', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, function(req, res){
+    Exchange.findById(req.params.exchange_id)
+    .populate({
+        path: "pairings",
+        populate: {
+            path: "assignee",
+            model: "User"
+        }
+    })
+    .populate({
+        path: "pairings",
+        populate: {
+            path: "pair",
+            model: "User"
+        }
+    })
+    .exec(function(err, foundExchange){
+        if(err){
+            console.log(err);
+        } else {
+            res.render('exchangeAdmin', {exchange: foundExchange});
+        }
+    })
+})
+
 // Show new exchange creation page
 router.get('/new', myAuthMiddleware.isLoggedIn, myAuthMiddleware.isOwner, function(req, res){
     User.findById(req.user)
