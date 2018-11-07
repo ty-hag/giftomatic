@@ -24,7 +24,9 @@ var express = require('express'),
     myAuthMiddleware = require('./my_auth_middleware'),
     seedDB = require('./seed_callbacks');
 
-mongoose.connect("mongodb://localhost:27017/giftOMatic", {useNewUrlParser: true});
+//mongoose.connect("mongodb://localhost:27017/giftOMatic", {useNewUrlParser: true});
+//mongoose.connect("mongodb://h-acty:Prohc27!@ds253713.mlab.com:53713/giftomatic", {useNewUrlParser: true});
+mongoose.connect(process.env.DATABASEURL, {useNewUrlParser: true});
 //seedDB();
 
 app.set('view engine', 'ejs');
