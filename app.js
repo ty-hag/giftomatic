@@ -25,6 +25,7 @@ var express = require('express'),
     seedDB = require('./seed_callbacks');
 
 //mongoose.connect("mongodb://localhost:27017/giftOMatic", {useNewUrlParser: true});
+
 mongoose.connect(process.env.DATABASEURL, {useNewUrlParser: true});
 //seedDB();
 
