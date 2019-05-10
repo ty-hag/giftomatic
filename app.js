@@ -25,7 +25,6 @@ var express = require('express'),
     seedDB = require('./seed_callbacks');
 
 //mongoose.connect("mongodb://localhost:27017/giftOMatic", {useNewUrlParser: true});
-//mongoose.connect("mongodb://h-acty:Prohc27!@ds253713.mlab.com:53713/giftomatic", {useNewUrlParser: true});
 mongoose.connect(process.env.DATABASEURL, {useNewUrlParser: true});
 //seedDB();
 
@@ -77,6 +76,7 @@ app.get('/register', function(req, res){
 })
 
 app.post('/register', function(req, res){
+    console.log("Hit register route");
     var newUser = new User(
         {
             username: req.body.username,
