@@ -140,4 +140,8 @@ function isCurrentUser(req, res, next){
 
 app.listen(process.env.PORT, function(){
     console.log("Gift-o-matic online!");
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> cdb91b960f780888f0ca367fe3b5a427162f5010
