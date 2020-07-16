@@ -1,3 +1,3 @@
-A web app for creating, sharing, and managing wishlists. Hope to be able to use it to run my family's gift exchange this year.
+First web app I made. Create, share, and manage wishlists and gift exchanges.
 
-Node/express, ejs, mongodb.
+Uses Node/express, ejs, mongodb.
